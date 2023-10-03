@@ -3,6 +3,7 @@ package com.musicwebbe.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -16,6 +17,6 @@ public class Account {
     private String email;
     private String img;
 
-    @ManyToOne
-    private Role role;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> role;
 }
