@@ -1,0 +1,21 @@
+package com.musicwebbe.model;
+
+import lombok.Data;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Date;
+
+@Entity
+@Data
+public class Comment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @ManyToOne
+    private Account account;
+    @ManyToOne
+    private Song song;
+    private String content;
+    private LocalDate timeComment;
+}
