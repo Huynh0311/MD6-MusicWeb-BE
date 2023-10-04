@@ -15,8 +15,9 @@ public class Account {
     private String password;
     private String phone;
     private String email;
+    @Lob
     private String img;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> role;
+    @ManyToOne(fetch = FetchType.EAGER)
+    private Role role;
 }
