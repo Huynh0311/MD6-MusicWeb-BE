@@ -3,7 +3,6 @@ package com.musicwebbe.model;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 @Data
