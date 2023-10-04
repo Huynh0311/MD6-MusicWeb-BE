@@ -23,9 +23,9 @@ public class AccountPrinciple implements UserDetails {
 
     public static AccountPrinciple build(Account account) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        for (Role role : account.getRole()) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
+        Role role = account.getRole();
+        authorities.add(new SimpleGrantedAuthority(role.getName()));
+
 
         return new AccountPrinciple(
                 account.getEmail(),
