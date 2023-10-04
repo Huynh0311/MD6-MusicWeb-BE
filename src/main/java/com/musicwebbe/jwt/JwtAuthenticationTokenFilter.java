@@ -2,7 +2,7 @@ package com.musicwebbe.jwt;
 
 
 import com.musicwebbe.jwt.service.JwtService;
-import com.musicwebbe.service.AccountService;
+import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
