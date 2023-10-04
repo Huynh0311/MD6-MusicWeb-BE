@@ -1,4 +1,4 @@
 package com.musicwebbe.service;
 
-public interface SongService {
+public interface ISongService {
 }
