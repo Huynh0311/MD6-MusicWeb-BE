@@ -1,4 +1,6 @@
 package com.musicwebbe.service;
 
-public interface ISingerService {
+import com.musicwebbe.model.Singer;
+
+public interface ISingerService extends IService<Singer> {
 }

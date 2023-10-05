@@ -62,12 +62,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().ignoringAntMatchers("/api/**");
         http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
         http.authorizeRequests()
+
+//                .antMatchers("/api/auth/**").permitAll()
+//                .antMatchers("/apiAccount/auth/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/api/candies/**", "/api/categories/**").permitAll()
+//                .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
+//                .antMatchers(HttpMethod.DELETE, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
+//                .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
+//                .antMatchers(HttpMethod.POST, "/apiAccount/save**").hasAnyRole("USER")
+//                .anyRequest().authenticated()
+//                .and().csrf().disable();
+
+
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/genres").permitAll()
                 .antMatchers("/apiAccount/auth/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/candies/**", "/api/categories/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**","/songs/add").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/apiAccount/save**").hasAnyRole("USER")
                 .anyRequest().authenticated()
                 .and().csrf().disable();
