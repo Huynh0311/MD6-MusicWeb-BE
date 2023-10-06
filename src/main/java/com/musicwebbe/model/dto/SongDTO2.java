@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SongDTO {
+public class SongDTO2 {
 
     private int id;
     private String nameSong;
@@ -28,7 +28,7 @@ public class SongDTO {
     private List<String> singers;
 
 
-    public SongDTO(Song song, int likeQuantity, List<String> singers) {
+    public SongDTO2(Song song, int likeQuantity, List<String> singers) {
         this.id = song.getId();
         this.nameSong = song.getNameSong();
         this.imgSong = song.getImgSong();

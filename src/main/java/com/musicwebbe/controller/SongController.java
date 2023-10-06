@@ -1,6 +1,6 @@
 package com.musicwebbe.controller;
 
-import com.musicwebbe.model.dto.SongDTO;
+import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.service.ILikesService;
 import com.musicwebbe.service.ISongService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,27 +28,27 @@ public class SongController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<SongDTO>> getAllSongs() {
-        List<SongDTO> songDTOList = songService.getAllSong();
-        return ResponseEntity.ok(songDTOList);
+    public ResponseEntity<List<SongDTO2>> getAllSongs() {
+        List<SongDTO2> songDTO2List = songService.getAllSong();
+        return ResponseEntity.ok(songDTO2List);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SongDTO> getaSong(@PathVariable int id) {
-        SongDTO songDTO = songService.getaSong(id);
-        return ResponseEntity.ok(songDTO);
+    public ResponseEntity<SongDTO2> getaSong(@PathVariable int id) {
+        SongDTO2 songDTO2 = songService.getaSong(id);
+        return ResponseEntity.ok(songDTO2);
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<SongDTO> editaSong(@PathVariable int id, @RequestBody SongDTO songDTO) {
-        if (songDTO.getId()==id) {
-            return new ResponseEntity<>(songService.editaSong(songDTO), HttpStatus.OK);
+    public ResponseEntity<SongDTO2> editaSong(@PathVariable int id, @RequestBody SongDTO2 songDTO2) {
+        if (songDTO2.getId()==id) {
+            return new ResponseEntity<>(songService.editaSong(songDTO2), HttpStatus.OK);
         } else return null;
 
     }
 
 //        @PostMapping("/{id}")
-//    public ResponseEntity<SongDTO> editaSong(@PathVariable int id, @RequestBody Song song, List<String> singer) {
+//    public ResponseEntity<SongDTO2> editaSong(@PathVariable int id, @RequestBody Song song, List<String> singer) {
 //        if (song.getId()==id) {
 //            return new ResponseEntity<>(songService.editaSong(song, singer), HttpStatus.OK);
 //        } else return null;
