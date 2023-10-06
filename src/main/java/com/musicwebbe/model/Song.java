@@ -14,7 +14,8 @@ public class Song {
     private String nameSong;
     private String imgSong;
     private int plays;
-    private String Genres;
+    @ManyToOne
+    private Genres genres;
     private LocalDate timeCreate;
     @Lob
     private String description;
