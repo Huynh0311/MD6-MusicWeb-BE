@@ -1,4 +1,4 @@
-package com.musicwebbe.service.impl;
+package com.musicwebbe.service;
 
 public interface IAccountService {
 }
