@@ -15,6 +15,7 @@ import java.util.List;
 @CrossOrigin("*")
 @RequestMapping("/apiAccount")
 public class AccountController {
+
     @Autowired
     AccountService accountService;
     @Autowired
@@ -34,7 +35,7 @@ public class AccountController {
         accFindId.setEmail(account.getEmail());
         accFindId.setPhone(account.getPhone());
         accFindId.setImg(account.getImg());
-        boolean check = accountService.add(accFindId);
+        boolean check = accountService.save(accFindId);
         if (check) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
@@ -46,7 +47,7 @@ public class AccountController {
     public ResponseEntity<?> savePassword(@RequestBody Account account) {
         String password = passwordEncoder.encode(account.getPassword());
         account.setPassword(password);
-        boolean check = accountService.add(account);
+        boolean check = accountService.save(account);
         if (check) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {

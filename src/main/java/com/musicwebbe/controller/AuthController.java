@@ -41,7 +41,7 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account userInfo = accountService.findByEmail(account.getEmail());
         return ResponseEntity.ok(new JwtResponse(userInfo.getId(), jwt,
-                userInfo.getEmail(), userInfo.getEmail(), userDetails.getAuthorities()));
+                userInfo.getEmail(), userInfo.getName(),userInfo.getImg(), userDetails.getAuthorities()));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
