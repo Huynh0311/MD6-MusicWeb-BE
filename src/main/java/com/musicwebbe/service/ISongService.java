@@ -1,4 +1,7 @@
 package com.musicwebbe.service;
 
-public interface ISongService {
+import com.musicwebbe.model.Song;
+
+public interface ISongService extends IService<Song> {
+    Song findSongByIDHQL (int id);
 }
