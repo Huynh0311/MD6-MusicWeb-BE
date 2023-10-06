@@ -37,4 +37,9 @@ public class SongService implements ISongService {
     public List<Song> getAll() {
         return iSongRepository.findAll();
     }
+
+    @Override
+    public Song findSongByIDHQL(int id) {
+        return iSongRepository.findSongByIDHQL(id);
+    }
 }
