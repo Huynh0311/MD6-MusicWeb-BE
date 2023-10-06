@@ -4,7 +4,7 @@ package com.musicwebbe.controller;
 import com.musicwebbe.jwt.service.JwtResponse;
 import com.musicwebbe.jwt.service.JwtService;
 import com.musicwebbe.model.Account;
-import com.musicwebbe.service.AccountService;
+import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +41,7 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account userInfo = accountService.findByEmail(account.getEmail());
         return ResponseEntity.ok(new JwtResponse(userInfo.getId(), jwt,
-                userInfo.getEmail(), userInfo.getEmail(), userDetails.getAuthorities()));
+                userInfo.getEmail(), userInfo.getName(),userInfo.getImg(), userDetails.getAuthorities()));
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)

@@ -4,7 +4,7 @@ package com.musicwebbe.config;
 import com.musicwebbe.jwt.CustomAccessDeniedHandler;
 import com.musicwebbe.jwt.JwtAuthenticationTokenFilter;
 import com.musicwebbe.jwt.RestAuthenticationEntryPoint;
-import com.musicwebbe.service.AccountService;
+import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

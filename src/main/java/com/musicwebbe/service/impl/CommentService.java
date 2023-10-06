@@ -1,4 +1,4 @@
-package com.musicwebbe.service;
+package com.musicwebbe.service.impl;
 
 import org.apache.catalina.User;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -1,4 +1,4 @@
-package com.musicwebbe.service;
+package com.musicwebbe.service.impl;
 
 
 import com.musicwebbe.model.Account;
@@ -23,6 +23,9 @@ public class AccountService implements UserDetailsService {
     }
 
     public boolean add(Account account) {
+        if(iAccountRepository.findAccountByEmail(account.getEmail()).isPresent()) {
+            return false;
+        }
         iAccountRepository.save(account);
         return true;
     }

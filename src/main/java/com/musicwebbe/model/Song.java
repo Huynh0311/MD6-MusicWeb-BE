@@ -2,10 +2,7 @@ package com.musicwebbe.model;
 
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -19,6 +16,8 @@ public class Song {
     private int plays;
     private String Genres;
     private LocalDate timeCreate;
+    @Lob
     private String description;
+    @Lob
     private String pathSong;
 }

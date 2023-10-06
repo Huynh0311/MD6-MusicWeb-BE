@@ -16,6 +16,7 @@ public class Comment {
     private Account account;
     @ManyToOne
     private Song song;
+    @Lob
     private String content;
     private LocalDate timeComment;
 }

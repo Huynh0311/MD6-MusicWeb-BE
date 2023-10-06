@@ -14,6 +14,7 @@ public class Account {
     private String password;
     private String phone;
     private String email;
+    @Lob
     private String img;
 
     @ManyToOne(fetch = FetchType.EAGER)
