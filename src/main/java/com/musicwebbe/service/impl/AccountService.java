@@ -31,6 +31,11 @@ public class AccountService implements UserDetailsService, IAccountService {
         return true;
     }
 
+    public boolean save(Account account) {
+        iAccountRepository.save(account);
+        return true;
+    }
+
     public UserDetails loadUserByUsername(String email) {
         List<Account> accounts = iAccountRepository.findAll();
         for (Account account : accounts) {
@@ -44,5 +49,10 @@ public class AccountService implements UserDetailsService, IAccountService {
     @Override
     public List<Account> getAll() {
         return iAccountRepository.findAll();
+    }
+
+    @Override
+    public Account findById(int id) {
+        return iAccountRepository.findById(id).get();
     }
 }
