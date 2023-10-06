@@ -36,4 +36,9 @@ public class SongService implements ISongService {
         return iSongRepository.findAll();
     }
 
+    @Override
+    public List<Song> findTop5ByPlaysDesc() {
+        return iSongRepository.findTop5ByPlaysDesc();
+    }
+
 }

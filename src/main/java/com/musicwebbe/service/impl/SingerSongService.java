@@ -39,8 +39,8 @@ public class SingerSongService implements ISingerSongService {
     }
 
     @Override
-    public List<Song> getAllSongsBySingerId(int singerId) {
-        return iSingerSongRepository.findAllSongsBySingerId(singerId);
+    public List<Song> findAllSongsBySimilarSingerName(String singerName) {
+        return iSingerSongRepository.findAllSongsBySimilarSingerName(singerName);
     }
 
 }

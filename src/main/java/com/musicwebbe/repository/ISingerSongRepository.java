@@ -10,7 +10,6 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ISingerSongRepository extends JpaRepository<SingerSong,Integer> {
-    @Query("SELECT ss.song FROM SingerSong ss WHERE ss.singer.id = :singerId")
-    List<Song> findAllSongsBySingerId(@Param("singerId") int singerId);
-
+    @Query("SELECT ss.song FROM SingerSong ss WHERE ss.singer.nameSinger LIKE %:singerName%")
+    List<Song> findAllSongsBySimilarSingerName(@Param("singerName") String singerName);
 }

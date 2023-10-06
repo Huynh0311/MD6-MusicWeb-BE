@@ -12,21 +12,21 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/SingerSong")
+@RequestMapping("/api")
 public class SingerSongController {
 
     @Autowired
-    ISingerSongService iSingerService;
+    ISingerSongService iSingerSongService;
 
     @PostMapping("/creatSingerSong")
     public ResponseEntity<SingerSong> save(@RequestBody SingerSong singerSong) {
-        SingerSong savedSingerSong = iSingerService.save(singerSong);
+        SingerSong savedSingerSong = iSingerSongService.save(singerSong);
         return new ResponseEntity<>(savedSingerSong, HttpStatus.OK);
     }
 
     @GetMapping("/SingerSong")
     public ResponseEntity<List<SingerSong>> getAll() {
-        List<SingerSong> singerSongs = iSingerService.getAll();
+        List<SingerSong> singerSongs = iSingerSongService.getAll();
         if (singerSongs.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -35,15 +35,15 @@ public class SingerSongController {
 
     @GetMapping("/{idSingerSong}")
     @ResponseBody
-    public ResponseEntity<SingerSong> getAccount(@PathVariable int idSingerSong) {
-        SingerSong singerSong = iSingerService.findById(idSingerSong).get();
+    public ResponseEntity<SingerSong> getSingerSongById(@PathVariable int idSingerSong) {
+        SingerSong singerSong = iSingerSongService.findById(idSingerSong).get();
         return new ResponseEntity<>(singerSong, HttpStatus.OK);
     }
 
-    @GetMapping("/getSongsBySinger/{singerId}")
-    public ResponseEntity<List<Song>> getSongsBySinger(@PathVariable int singerId) {
-        List<Song> songs = iSingerService.getAllSongsBySingerId(singerId);
-        if (songs.isEmpty()) {
+    @GetMapping("/getSongsBySinger/{singerName}")
+    public ResponseEntity<List<Song>> getSongsBySinger(@PathVariable String singerName) {
+        List<Song> songs = iSingerSongService.findAllSongsBySimilarSingerName(singerName);
+        if (songs == null || songs.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(songs, HttpStatus.OK);

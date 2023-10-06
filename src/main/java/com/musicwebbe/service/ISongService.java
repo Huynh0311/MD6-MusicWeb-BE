@@ -15,5 +15,7 @@ public interface ISongService {
 
     Optional<Song> findById(int id);
     List<Song> getAll();
+    List<Song> findTop5ByPlaysDesc();
+
 
 }

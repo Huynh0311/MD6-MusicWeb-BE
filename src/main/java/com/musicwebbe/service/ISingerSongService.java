@@ -17,5 +17,5 @@ public interface ISingerSongService {
 
     List<SingerSong> getAll();
 
-    List<Song> getAllSongsBySingerId(int singerId);
+    List<Song> findAllSongsBySimilarSingerName(String singerName);
 }
