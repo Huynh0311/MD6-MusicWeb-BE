@@ -11,12 +11,28 @@ import java.util.List;
 
 @Service
 public class SingerSongService implements ISingerSongService {
-
     @Autowired
     ISingerSongRepository iSingerSongRepository;
 
+    @Override
+    public SingerSong save(SingerSong singerSong) {
+        return iSingerSongRepository.save(singerSong);
+    }
 
+    @Override
+    public SingerSong edit(SingerSong singerSong) {
+        return iSingerSongRepository.save(singerSong);
+    }
 
+    @Override
+    public void delete(int id) {
+        iSingerSongRepository.deleteById(id);
+    }
+
+    @Override
+    public SingerSong findById(int id) {
+        return iSingerSongRepository.findById(id).get();
+    }
 
     @Override
     public List<SingerSong> getAll() {
@@ -27,5 +43,4 @@ public class SingerSongService implements ISingerSongService {
     public List<Song> findAllSongsBySimilarSingerName(String singerName) {
         return iSingerSongRepository.findAllSongsBySimilarSingerName(singerName);
     }
-
 }

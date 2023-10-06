@@ -8,12 +8,12 @@ import java.util.Set;
 public class AccountDTO {
     private Long id;
     private String name;
-    private Set<Role> roles;
+    private Role roles;
 
     public AccountDTO() {
     }
 
-    public AccountDTO(Long id, String name, Set<Role> roles) {
+    public AccountDTO(Long id, String name, Role roles) {
         this.id = id;
         this.name = name;
         this.roles = roles;
@@ -35,11 +35,11 @@ public class AccountDTO {
         this.name = name;
     }
 
-    public Set<Role> getRoles() {
+    public Role getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(Role roles) {
         this.roles = roles;
     }
 }

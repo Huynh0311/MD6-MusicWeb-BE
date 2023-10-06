@@ -11,13 +11,15 @@ public class JwtResponse {
     private String type = "Bearer";
     private String username;
     private String name;
+    private String img;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public JwtResponse(int id, String token, String username, String name, Collection<? extends GrantedAuthority> authorities) {
+    public JwtResponse(int id, String token, String username, String name,String img, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.token = token;
         this.username = username;
         this.name = name;
+        this.img = img;
         this.authorities = authorities;
     }
 
@@ -51,6 +53,14 @@ public class JwtResponse {
 
     public void setTokenType(String tokenType) {
         this.type = tokenType;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getUsername() {

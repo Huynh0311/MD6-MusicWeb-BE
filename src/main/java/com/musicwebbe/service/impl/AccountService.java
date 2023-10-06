@@ -24,6 +24,14 @@ public class AccountService implements UserDetailsService, IAccountService {
     }
 
     public boolean add(Account account) {
+        if(iAccountRepository.findAccountByEmail(account.getEmail()).isPresent()) {
+            return false;
+        }
+        iAccountRepository.save(account);
+        return true;
+    }
+
+    public boolean save(Account account) {
         iAccountRepository.save(account);
         return true;
     }
@@ -41,5 +49,10 @@ public class AccountService implements UserDetailsService, IAccountService {
     @Override
     public List<Account> getAll() {
         return iAccountRepository.findAll();
+    }
+
+    @Override
+    public Account findById(int id) {
+        return iAccountRepository.findById(id).get();
     }
 }

@@ -7,14 +7,31 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SongService implements ISongService {
     @Autowired
     ISongRepository iSongRepository;
 
+    @Override
+    public Song save(Song song) {
+        return iSongRepository.save(song);
+    }
 
+    @Override
+    public Song edit(Song song) {
+        return iSongRepository.save(song);
+    }
+
+    @Override
+    public void delete(int id) {
+        iSongRepository.deleteById(id);
+    }
+
+    @Override
+    public Song findById(int id) {
+        return iSongRepository.findById(id).get();
+    }
 
     @Override
     public List<Song> getAll() {
@@ -22,8 +39,11 @@ public class SongService implements ISongService {
     }
 
     @Override
+    public Song findSongByIDHQL(int id) {
+        return iSongRepository.findSongByIDHQL(id);
+    }
+    @Override
     public List<Song> findTop5ByPlaysDesc() {
         return iSongRepository.findTop5ByPlaysDesc();
     }
-
 }
