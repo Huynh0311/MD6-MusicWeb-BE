@@ -1,2 +1,6 @@
-package com.musicwebbe.controller;public class SingerController {
+package com.musicwebbe.controller;
+
+public class SingerController {
+
+
 }
