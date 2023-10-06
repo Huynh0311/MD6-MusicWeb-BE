@@ -14,22 +14,7 @@ public class SongService implements ISongService {
     @Autowired
     ISongRepository iSongRepository;
 
-    @Override
-    public Song save(Song song) {
-        return iSongRepository.save(song);
 
-    }
-
-    @Override
-    public boolean delete(int id) {
-        iSongRepository.deleteById(id);
-        return false;
-    }
-
-    @Override
-    public Optional<Song> findById(int id) {
-        return iSongRepository.findById(id);
-    }
 
     @Override
     public List<Song> getAll() {

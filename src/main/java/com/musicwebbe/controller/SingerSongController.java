@@ -18,11 +18,7 @@ public class SingerSongController {
     @Autowired
     ISingerSongService iSingerSongService;
 
-    @PostMapping("/creatSingerSong")
-    public ResponseEntity<SingerSong> save(@RequestBody SingerSong singerSong) {
-        SingerSong savedSingerSong = iSingerSongService.save(singerSong);
-        return new ResponseEntity<>(savedSingerSong, HttpStatus.OK);
-    }
+
 
     @GetMapping("/SingerSong")
     public ResponseEntity<List<SingerSong>> getAll() {
@@ -33,12 +29,6 @@ public class SingerSongController {
         return new ResponseEntity<>(singerSongs, HttpStatus.OK);
     }
 
-    @GetMapping("/{idSingerSong}")
-    @ResponseBody
-    public ResponseEntity<SingerSong> getSingerSongById(@PathVariable int idSingerSong) {
-        SingerSong singerSong = iSingerSongService.findById(idSingerSong).get();
-        return new ResponseEntity<>(singerSong, HttpStatus.OK);
-    }
 
     @GetMapping("/getSongsBySinger/{singerName}")
     public ResponseEntity<List<Song>> getSongsBySinger(@PathVariable String singerName) {

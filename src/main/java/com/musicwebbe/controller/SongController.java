@@ -11,17 +11,11 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api/song")
+@RequestMapping("songs")
 public class SongController {
 
     @Autowired
     ISongService iSongService;
-
-    @PostMapping("/creatSingerSong")
-    public ResponseEntity<Song> save(@RequestBody Song song) {
-        Song savedSong = iSongService.save(song);
-        return new ResponseEntity<>(savedSong, HttpStatus.OK);
-    }
 
     @GetMapping("/getall")
     public ResponseEntity<List<Song>> getAll() {
