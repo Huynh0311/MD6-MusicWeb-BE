@@ -4,6 +4,5 @@ import com.musicwebbe.model.Account;
 
 import java.util.List;
 
-public interface IAccountService {
-    List<Account> getAll();
+public interface IGenresService {
 }

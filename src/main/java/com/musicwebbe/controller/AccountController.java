@@ -1,6 +1,7 @@
 package com.musicwebbe.controller;
 
 import com.musicwebbe.model.Account;
+import com.musicwebbe.service.IAccountService;
 import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,10 +16,12 @@ import java.util.List;
 public class AccountController {
     @Autowired
     AccountService accountService;
+    @Autowired
+    IAccountService iAccountService;
 
     @PostMapping("/all")
     public ResponseEntity<List<Account>> getAll() {
-        List<Account> studentList = accountService.getAll();
+        List<Account> studentList = iAccountService.getAll();
         if (studentList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
