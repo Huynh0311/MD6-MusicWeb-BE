@@ -24,6 +24,9 @@ public class AccountService implements UserDetailsService, IAccountService {
     }
 
     public boolean add(Account account) {
+        if(iAccountRepository.findAccountByEmail(account.getEmail()).isPresent()) {
+            return false;
+        }
         iAccountRepository.save(account);
         return true;
     }
