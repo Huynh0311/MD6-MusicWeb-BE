@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -88,5 +89,21 @@ public class SongController {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
         return new ResponseEntity<>(songDTO, HttpStatus.OK);
+    }
+    @GetMapping("/getall")
+    public ResponseEntity<List<Song>> getAll() {
+        List<Song> songs = iSongService.getAll();
+        if (songs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(songs, HttpStatus.OK);
+    }
+    @GetMapping("/top5ByPlays")
+    public List<Song> getTop5SongsByPlays() {
+        List<Song> top5Songs = iSongService.findTop5ByPlaysDesc();
+        if (top5Songs.size() > 5) {
+            top5Songs = top5Songs.subList(0, 5);
+        }
+        return top5Songs;
     }
 }

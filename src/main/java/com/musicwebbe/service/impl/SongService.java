@@ -42,4 +42,8 @@ public class SongService implements ISongService {
     public Song findSongByIDHQL(int id) {
         return iSongRepository.findSongByIDHQL(id);
     }
+    @Override
+    public List<Song> findTop5ByPlaysDesc() {
+        return iSongRepository.findTop5ByPlaysDesc();
+    }
 }
