@@ -27,4 +27,6 @@ public interface ISingerRepository extends JpaRepository<Singer,Integer> {
     @Modifying
     @Query(nativeQuery = true, value = "delete singer.* FROM musicweb_md6.singer inner join musicweb_md6.singer_song on singer_song.singer_id = singer.id inner join song on song.id = singer_song.song_id where song.id like %:idsong%;")
     List<Singer> deleteSingerBySongId(@Param("idsong")  int idsong);
+    @Query(nativeQuery = true,value ="select sg.* from Singer sg inner join singer_song ss on ss.singer_id=sg.id inner join song s on ss.song_id=s.id where s.id like %:id")
+    List<Singer> findListSingerBySongID(@Param("id") int id);
 }

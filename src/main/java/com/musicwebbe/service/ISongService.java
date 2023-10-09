@@ -4,10 +4,10 @@ import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.model.Song;
 import java.util.List;
 
-import java.util.List;
 
 public interface ISongService extends IService<Song> {
     Song findSongByIDHQL (int id);
+    List<Song> findAllSongByGenresID(int id);
 
     List<Song> getAll();
     List<Song> findTop5ByPlaysDesc();
