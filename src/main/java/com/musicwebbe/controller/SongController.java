@@ -3,6 +3,7 @@ package com.musicwebbe.controller;
 import com.musicwebbe.model.*;
 import com.musicwebbe.model.dto.AccountDTO;
 import com.musicwebbe.model.dto.SongDTO;
+import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.service.ISingerService;
 import com.musicwebbe.service.ISingerSongService;
 import com.musicwebbe.service.ISongService;
@@ -90,6 +91,7 @@ public class SongController {
         }
         return new ResponseEntity<>(songDTO, HttpStatus.OK);
     }
+
     @GetMapping("/getall")
     public ResponseEntity<List<Song>> getAll() {
         List<Song> songs = iSongService.getAll();
@@ -105,5 +107,30 @@ public class SongController {
             top5Songs = top5Songs.subList(0, 5);
         }
         return top5Songs;
+    }
+
+    @GetMapping("/delete/{id}")
+    public ResponseEntity<?> deleteSong(@PathVariable int id) {
+        iSongService.deleteaSong(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<SongDTO2>> getAllSongs() {
+        List<SongDTO2> songDTO2List = iSongService.getAllSong();
+        return ResponseEntity.ok(songDTO2List);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SongDTO2> getaSong(@PathVariable int id) {
+        SongDTO2 songDTO2 = iSongService.getaSong(id);
+        return ResponseEntity.ok(songDTO2);
+    }
+
+    @PostMapping("/edit/{id}")
+    public ResponseEntity<SongDTO2> editaSong(@PathVariable int id, @RequestBody SongDTO2 songDTO2) {
+        if (songDTO2.getId() == id) {
+            return new ResponseEntity<>(iSongService.editaSong(songDTO2), HttpStatus.OK);
+        } return null;
     }
 }
