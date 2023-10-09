@@ -19,7 +19,7 @@ public class SongDTO {
     private LocalDate timeCreate;
     private String description;
     private String pathSong;
-    private String singerName;
+    private String[] singerName;
     private int accountID;
     private String accountName;
 }
