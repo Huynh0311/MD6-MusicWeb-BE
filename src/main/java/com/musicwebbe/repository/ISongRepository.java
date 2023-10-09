@@ -13,4 +13,6 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
 
     @Query(nativeQuery = true,value = "select s.* from song s inner join genres g on s.genres_id= g.id inner join singer_song ss on s.id=ss.song_id inner join singer sg on ss.singer_id=sg.id where g.id=:id group by s.id")
     List<Song> findAllSongByGenresID(@Param("id")int id);
+    @Query("SELECT s FROM Song s ORDER BY s.plays DESC")
+    List<Song> findTop5ByPlaysDesc();
 }

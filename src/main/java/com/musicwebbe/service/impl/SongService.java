@@ -1,7 +1,6 @@
 package com.musicwebbe.service.impl;
 
 import com.musicwebbe.model.Song;
-import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.repository.ISongRepository;
 import com.musicwebbe.service.ISongService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,5 +46,9 @@ public class SongService implements ISongService {
     @Override
     public List<Song> findAllSongByGenresID(int id) {
         return iSongRepository.findAllSongByGenresID(id);
+    }
+    @Override
+    public List<Song> findTop5ByPlaysDesc() {
+        return iSongRepository.findTop5ByPlaysDesc();
     }
 }

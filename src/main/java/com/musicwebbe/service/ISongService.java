@@ -9,4 +9,9 @@ import java.util.List;
 public interface ISongService extends IService<Song> {
     Song findSongByIDHQL (int id);
     List<Song> findAllSongByGenresID(int id);
+
+    List<Song> getAll();
+    List<Song> findTop5ByPlaysDesc();
+
+
 }

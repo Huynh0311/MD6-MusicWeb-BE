@@ -131,4 +131,20 @@ public class SongController {
 
         return new ResponseEntity<>(songDTOList,HttpStatus.OK);
     }
+    @GetMapping("/getall")
+    public ResponseEntity<List<Song>> getAll() {
+        List<Song> songs = iSongService.getAll();
+        if (songs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(songs, HttpStatus.OK);
+    }
+    @GetMapping("/top5ByPlays")
+    public List<Song> getTop5SongsByPlays() {
+        List<Song> top5Songs = iSongService.findTop5ByPlaysDesc();
+        if (top5Songs.size() > 5) {
+            top5Songs = top5Songs.subList(0, 5);
+        }
+        return top5Songs;
+    }
 }
