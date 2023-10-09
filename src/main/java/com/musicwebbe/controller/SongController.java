@@ -39,12 +39,12 @@ public class SongController {
                                         @RequestParam(value = "genres_id") int genres_id,
                                         @RequestParam(value = "singer") String[] singer,
                                         @RequestParam(value = "description") String description) {
-        String email = "";
+        String email = "huynh111@gmail.com";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            email = userDetails.getUsername();
-        }
+//        if (authentication.isAuthenticated()) {
+//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//            email = userDetails.getUsername();
+//        }
         Account account = accountService.findByEmail(email);
         Song song = new Song();
         song.setImgSong(imgSong);
@@ -74,7 +74,7 @@ public class SongController {
             iSingerSongService.save(singerSong);
         }
         return new ResponseEntity<>(song,HttpStatus.OK);
-}
+    }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<SongDTO> findSongByID(@PathVariable int id) {
