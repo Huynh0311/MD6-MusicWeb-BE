@@ -15,4 +15,7 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
     List<Song> findAllSongByGenresID(@Param("id")int id);
     @Query("SELECT s FROM Song s ORDER BY s.plays DESC")
     List<Song> findTop5ByPlaysDesc();
+
+    void deleteById(int id);
+
 }

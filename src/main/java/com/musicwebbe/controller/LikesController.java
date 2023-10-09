@@ -58,7 +58,7 @@ public class LikesController {
 
     @GetMapping("/getlike/{id}")
     public ResponseEntity<Integer> getLikeQuantity(@PathVariable int id) {
-        Integer songLikedQuantity = iLikesService.getLikeQuantity(id);
+        Integer songLikedQuantity = iLikesService.getLikeQuantity2(id);
         return ResponseEntity.ok(songLikedQuantity != null ? songLikedQuantity : 0);
     }
 }

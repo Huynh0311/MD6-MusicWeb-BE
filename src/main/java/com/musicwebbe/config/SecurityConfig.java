@@ -80,6 +80,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/apiAccount/**").permitAll()
                 .antMatchers("/genres").permitAll()
                 .antMatchers("/apiAccount/auth/**").permitAll()
+                // add test -----------
+                .antMatchers(HttpMethod.GET, "/songs/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/songs/**").permitAll()
+                // add test ----------
                 .antMatchers("/songs/**").permitAll() //Test
                 .antMatchers("/likes/**").permitAll() //Test
                 .antMatchers(HttpMethod.GET, "/api/candies/**", "/api/categories/**").permitAll()

@@ -44,8 +44,8 @@ public class LikesService implements ILikesService {
     }
 
     @Override
-    public int getLikeQuantity(int id) {
-        return iLikesRepository.getLikeQuantity(id);
+    public int getLikeQuantity2(int id) {
+        return iLikesRepository.getLikeQuantity2(id);
     }
 
     @Override
