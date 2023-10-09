@@ -4,7 +4,13 @@ import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.model.Song;
 import java.util.List;
 
+import java.util.List;
+
 public interface ISongService extends IService<Song> {
+    Song findSongByIDHQL (int id);
+
+    List<Song> getAll();
+    List<Song> findTop5ByPlaysDesc();
 
     void delete(int id);
 
@@ -14,6 +20,5 @@ public interface ISongService extends IService<Song> {
 
     SongDTO2 editaSong(SongDTO2 songDTO2);
 
-    Song findSongByIDHQL(int id);
-
+    void deleteaSong(int id);
 }

@@ -44,6 +44,11 @@ public class SongService implements ISongService {
     }
 
     @Override
+    public void delete(int id) {
+        iSongRepository.deleteById(id);
+    }
+
+    @Override
     public Song findById(int id) {
         return iSongRepository.findById(id).get();
     }
@@ -59,7 +64,12 @@ public class SongService implements ISongService {
     }
 
     @Override
-    public void delete(int id) {
+    public List<Song> findTop5ByPlaysDesc() {
+        return iSongRepository.findTop5ByPlaysDesc();
+    }
+
+    @Override
+    public void deleteaSong(int id) {
         likesRepository.deleteAllBySong(iSongRepository.findById(id).get());
         iSongRepository.deleteById(id);
 

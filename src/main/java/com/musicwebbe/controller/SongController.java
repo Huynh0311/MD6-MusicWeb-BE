@@ -92,9 +92,26 @@ public class SongController {
         return new ResponseEntity<>(songDTO, HttpStatus.OK);
     }
 
+    @GetMapping("/getall")
+    public ResponseEntity<List<Song>> getAll() {
+        List<Song> songs = iSongService.getAll();
+        if (songs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(songs, HttpStatus.OK);
+    }
+    @GetMapping("/top5ByPlays")
+    public List<Song> getTop5SongsByPlays() {
+        List<Song> top5Songs = iSongService.findTop5ByPlaysDesc();
+        if (top5Songs.size() > 5) {
+            top5Songs = top5Songs.subList(0, 5);
+        }
+        return top5Songs;
+    }
+
     @GetMapping("/delete/{id}")
     public ResponseEntity<?> deleteSong(@PathVariable int id) {
-        iSongService.delete(id);
+        iSongService.deleteaSong(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -110,11 +127,10 @@ public class SongController {
         return ResponseEntity.ok(songDTO2);
     }
 
-        @PostMapping("/edit/{id}")
+    @PostMapping("/edit/{id}")
     public ResponseEntity<SongDTO2> editaSong(@PathVariable int id, @RequestBody SongDTO2 songDTO2) {
-            if (songDTO2.getId() == id) {
-                return new ResponseEntity<>(iSongService.editaSong(songDTO2), HttpStatus.OK);
-            } return null;
-        }
-
+        if (songDTO2.getId() == id) {
+            return new ResponseEntity<>(iSongService.editaSong(songDTO2), HttpStatus.OK);
+        } return null;
+    }
 }
