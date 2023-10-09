@@ -1,4 +1,10 @@
 package com.musicwebbe.service;
 
-public interface ILikesService {
+import com.musicwebbe.model.Likes;
+import org.springframework.data.repository.query.Param;
+
+public interface ILikesService extends IService<Likes> {
+    int isLiked(int idSong,int idAccount);
+    int getLikeQuantity(int id);
+    void removeLikeBySongIDAndAccountID(int idSong,int idAccount);
 }

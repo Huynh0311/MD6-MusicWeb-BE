@@ -9,6 +9,7 @@ import com.musicwebbe.service.ISongService;
 import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,6 +18,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -78,15 +81,54 @@ public class SongController {
     @GetMapping("/find/{id}")
     public ResponseEntity<SongDTO> findSongByID(@PathVariable int id) {
         Song song = iSongService.findSongByIDHQL(id);
-        Singer singer = iSingerService.findSingerBySongID(id);
+        List<Singer> singerList = iSingerService.findListSingerBySongID(id);
+        String[]nameList = new String[singerList.size()];
+        for(int i = 0;i<singerList.size();i++) {
+            nameList[i]=singerList.get(i).getNameSinger();
+        }
         SongDTO songDTO = new SongDTO();
+        songDTO.setSingerName(nameList);
         BeanUtils.copyProperties(song, songDTO);
-        songDTO.setSingerName(singer.getNameSinger());
-        songDTO.setAccountName(singer.getAccount().getName());
-        songDTO.setAccountID(singer.getAccount().getId());
+        songDTO.setAccountName(singerList.get(0).getAccount().getName());
+        songDTO.setAccountID(singerList.get(0).getAccount().getId());
         if (songDTO == null) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
         return new ResponseEntity<>(songDTO, HttpStatus.OK);
+    }
+
+    @PostMapping("/play/{id}")
+    public int playSong(@PathVariable int id) {
+        Song song = iSongService.findById(id);
+        int playCount = song.getPlays();
+        playCount++;
+        song.setPlays(playCount);
+        iSongService.edit(song);
+        return playCount;
+    }
+
+    @GetMapping("/getByGenresID/{id}")
+    public ResponseEntity<List<SongDTO>>findAllSongByGenresID(@PathVariable int id){
+        Song song = iSongService.findById(id);
+        if(song==null){
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
+        int songGenresID = song.getGenres().getId();
+//        List<Song>songList = iSongService.findAllSongByGenresID(songGenresID);
+        List<Song> songList=iSongService.findAllSongByGenresID(songGenresID);
+        List<SongDTO>songDTOList = new ArrayList<>();
+        for(Song aSong : songList){
+            List<Singer> singerList = iSingerService.findListSingerBySongID(aSong.getId());
+            SongDTO songDTO = new SongDTO();
+            BeanUtils.copyProperties(aSong,songDTO);
+            String[]nameList = new String[singerList.size()];
+            for(int i = 0;i<singerList.size();i++) {
+                nameList[i]=singerList.get(i).getNameSinger();
+            }
+            songDTO.setSingerName(nameList);
+            songDTOList.add(songDTO);
+        }
+
+        return new ResponseEntity<>(songDTOList,HttpStatus.OK);
     }
 }
