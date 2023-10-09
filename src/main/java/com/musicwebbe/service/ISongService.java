@@ -1,10 +1,10 @@
 package com.musicwebbe.service;
 
 import com.musicwebbe.model.dto.SongDTO2;
-
+import com.musicwebbe.model.Song;
 import java.util.List;
 
-public interface ISongService {
+public interface ISongService extends IService<Song> {
 
     void delete(int id);
 
@@ -14,5 +14,6 @@ public interface ISongService {
 
     SongDTO2 editaSong(SongDTO2 songDTO2);
 
-//    SongDTO2 editaSong(Song song, List<String> singer);
+    Song findSongByIDHQL(int id);
+
 }
