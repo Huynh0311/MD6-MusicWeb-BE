@@ -16,7 +16,6 @@ public class Account {
     private String email;
     @Lob
     private String img;
-
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
     @Column(columnDefinition="tinyint(1) default 0")
