@@ -21,4 +21,5 @@ public class Song {
     private String description;
     @Lob
     private String pathSong;
+    private String nameSinger;
 }
