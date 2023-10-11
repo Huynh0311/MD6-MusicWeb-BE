@@ -19,6 +19,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -56,6 +59,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public CustomAccessDeniedHandler customAccessDeniedHandler() {
         return new CustomAccessDeniedHandler();
     }
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("*"); // Cho phép tất cả các origin (cần điều chỉnh cho môi trường sản xuất)
+        configuration.addAllowedMethod("*"); // Cho phép tất cả các phương thức HTTP (GET, POST, PUT, DELETE, v.v.)
+        configuration.addAllowedHeader("*"); // Cho phép tất cả các header
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
     protected void configure(HttpSecurity http) throws Exception {
         // Disable crsf cho đường dẫn /api/**
@@ -63,10 +77,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic().authenticationEntryPoint(restServicesEntryPoint());
         http.authorizeRequests()
                 .antMatchers("/api/auth/**").permitAll()
+                .antMatchers("/apiAccount/**").permitAll()
+                .antMatchers("/genres").permitAll()
+                .antMatchers("/apiAccount/auth/**").permitAll()
+                // add test -----------
+                .antMatchers(HttpMethod.GET, "/songs/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/songs/**").permitAll()
+                // add test ----------
+                .antMatchers("/songs/**").permitAll() //Test
+                .antMatchers("/likes/**").permitAll() //Test
                 .antMatchers(HttpMethod.GET, "/api/candies/**", "/api/categories/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
+                .antMatchers(HttpMethod.POST, "/apiAccount/save**").hasAnyRole("USER", "ADMIN")
+                .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**","/songs/add").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/apiAccount/save**").hasAnyRole("USER")
                 .anyRequest().authenticated()
                 .and().csrf().disable();

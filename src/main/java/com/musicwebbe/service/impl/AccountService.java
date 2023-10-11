@@ -4,6 +4,7 @@ package com.musicwebbe.service.impl;
 import com.musicwebbe.model.Account;
 import com.musicwebbe.model.AccountPrinciple;
 import com.musicwebbe.repository.IAccountRepository;
+import com.musicwebbe.service.IAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -14,7 +15,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class AccountService implements UserDetailsService {
+public class AccountService implements UserDetailsService, IAccountService {
 
     @Autowired
     private IAccountRepository iAccountRepository;
@@ -34,6 +35,11 @@ public class AccountService implements UserDetailsService {
         return true;
     }
 
+    public boolean save(Account account) {
+        iAccountRepository.save(account);
+        return true;
+    }
+
     public UserDetails loadUserByUsername(String email) {
         List<Account> accounts = iAccountRepository.findAll();
         for (Account account : accounts) {
@@ -43,7 +49,14 @@ public class AccountService implements UserDetailsService {
         }
         return null;
     }
-    public List<Account> getAll(){
+
+    @Override
+    public List<Account> getAll() {
         return iAccountRepository.findAll();
+    }
+
+    @Override
+    public Account findById(int id) {
+        return iAccountRepository.findById(id).get();
     }
 }

@@ -19,4 +19,6 @@ public class Account {
 
     @ManyToOne(fetch = FetchType.EAGER)
     private Role role;
+    @Column(columnDefinition="tinyint(1) default 0")
+    private boolean isAuth;
 }
