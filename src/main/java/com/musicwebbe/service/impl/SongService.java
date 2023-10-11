@@ -42,6 +42,7 @@ public class SongService implements ISongService {
 
     @Autowired
     ISingerSongRepository iSingerSongRepository;
+
     @Autowired
     IAccountRepository iAccountRepository;
 
@@ -70,27 +71,6 @@ public class SongService implements ISongService {
     @Override
     public List<Song> getAll() {
         return iSongRepository.findAll();
-    }
-
-    @Override
-    public Song findSongByIDHQLAuth(int id) {
-        return iSongRepository.findSongByIDHQLAuth(id);
-    }
-
-    @Override
-    public Song findSongByIDHQLNotAuth(int id) {
-        return iSongRepository.findSongByIDHQLNotAuth(id);
-    }
-
-
-    @Override
-    public List<Song> findAllSongByGenresIDAuth(int id) {
-        return iSongRepository.findAllSongByGenresIDAuth(id);
-    }
-
-    @Override
-    public List<Song> findAllSongByGenresIDNotAuth(int id) {
-        return iSongRepository.findAllSongByGenresIDNotAuth(id);
     }
 
     @Override
@@ -133,7 +113,7 @@ public class SongService implements ISongService {
 
     @Override
     public SongDTO2 getaSong(int id) {
-        Optional<Song>songOptional = iSongRepository.findById(id);
+        Optional<Song> songOptional = iSongRepository.findById(id);
         Song song = songOptional.get();
         int likeQuantity = likesRepository.getLikeQuantity(id);
         List<String> singers = isingerRepository.getSinger(id);
@@ -158,10 +138,11 @@ public class SongService implements ISongService {
 
         List<String> singers = isingerRepository.getSinger(songDTO2.getId());
 
-        return new SongDTO2(savedSong, likesRepository.getLikeQuantity(songDTO2.getId()),singers);
+        return new SongDTO2(savedSong, likesRepository.getLikeQuantity(songDTO2.getId()), singers);
     }
+
     @Override
-    public Song addSong(Account account,Song song) {
+    public Song addSong(Account account, Song song) {
         song.setPlays(0);
         song.setTimeCreate(LocalDate.now());
         song.setAccount(account);
@@ -176,25 +157,22 @@ public class SongService implements ISongService {
         return song;
     }
 
-    public SongDTO findSongById(Account account,int id){
-        Song song = account.isAuth() ? iSongRepository.findSongByIDHQLAuth(id) : iSongRepository.findSongByIDHQLNotAuth(id);
+    public SongDTO findSongById(int id) {
+        Song song = iSongRepository.findSongByIDHQL(id);
         SongDTO songDTO = new SongDTO();
         BeanUtils.copyProperties(song, songDTO);
-        account = iAccountRepository.findById(song.getAccount().getId()).get();
+        Account account = iAccountRepository.findById(song.getAccount().getId()).get();
         songDTO.setAccountName(account.getName());
         songDTO.setAccountID(account.getId());
+        songDTO.setAuth(account.isAuth());
         return songDTO;
     }
 
     @Override
-    public List<SongDTO> getAllSongByGenresID(Account account, Song song) {
+    public List<SongDTO> getAllSongByGenresID(Song song) {
         int songGenresID = song.getGenres().getId();
         List<Song> songList;
-        if (account.isAuth()) {
-            songList = iSongRepository.findAllSongByGenresIDAuth(songGenresID);
-        } else {
-            songList = iSongRepository.findAllSongByGenresIDNotAuth(songGenresID);
-        }
+        songList = iSongRepository.findAllSongByGenresID(songGenresID);
         List<SongDTO> songDTOList = new ArrayList<>();
         for (Song aSong : songList) {
             SongDTO songDTO = new SongDTO();

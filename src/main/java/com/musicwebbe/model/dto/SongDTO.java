@@ -22,4 +22,5 @@ public class SongDTO {
     private String NameSinger;
     private int accountID;
     private String accountName;
+    private boolean isAuth;
 }

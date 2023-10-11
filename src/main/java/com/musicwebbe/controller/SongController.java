@@ -58,8 +58,7 @@ public class SongController {
 
     @GetMapping("/find/{id}")
     public ResponseEntity<SongDTO> findSongByID(@PathVariable int id) {
-        Account account = getCurrentAccount();
-        SongDTO songDTO = iSongService.findSongById(account, id);
+        SongDTO songDTO = iSongService.findSongById(id);
         if (songDTO == null) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
@@ -78,12 +77,11 @@ public class SongController {
 
     @GetMapping("/getByGenresID/{id}")
     public ResponseEntity<List<SongDTO>> findAllSongByGenresID(@PathVariable int id) {
-        Account account = getCurrentAccount();
         Song song = iSongService.findById(id);
         if (song == null) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
-        List<SongDTO> listSongDTO = iSongService.getAllSongByGenresID(account, song);
+        List<SongDTO> listSongDTO = iSongService.getAllSongByGenresID(song);
         return new ResponseEntity<>(listSongDTO, HttpStatus.OK);
     }
 
