@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class AccountService implements UserDetailsService, IAccountService {
@@ -27,6 +28,9 @@ public class AccountService implements UserDetailsService, IAccountService {
 
     public Account findByEmail(String email) {
         return iAccountRepository.findAllByEmail(email);
+    }
+    public Optional<Account> findAccountByEmail(String email) {
+        return iAccountRepository.findAccountByEmail(email);
     }
 
     public void add(RegisterRequest registerRequest) throws Exception{

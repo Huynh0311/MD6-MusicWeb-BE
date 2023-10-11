@@ -60,4 +60,18 @@ public class AuthController {
             return new ResponseEntity<>("Lỗi hệ thống, chi tiết: " + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    @RequestMapping(value = "/check", method = RequestMethod.POST)
+    public ResponseEntity<?> check(@RequestBody Account account) {
+        boolean check = true;
+        Account accountCheck = null;
+        if (accountService.findAccountByEmail(account.getEmail()).isPresent()){
+            accountCheck = accountService.findAccountByEmail(account.getEmail()).get();
+            check = false;
+        }
+        if (!check) {
+            return new ResponseEntity<>(accountCheck,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(account,HttpStatus.BAD_REQUEST);
+        }
+    }
 }

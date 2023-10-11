@@ -23,4 +23,6 @@ public class Song {
     @Lob
     private String pathSong;
     private String nameSinger;
+    @ManyToOne
+    private Account account;
 }
