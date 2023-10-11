@@ -1,5 +1,6 @@
 package com.musicwebbe.request;
 
+import com.musicwebbe.model.Role;
 import lombok.Data;
 
 import javax.validation.constraints.*;
@@ -20,4 +21,5 @@ public class RegisterRequest {
 //    @NotNull
 //    @Pattern()
     private String phone;
+    private Role role;
 }

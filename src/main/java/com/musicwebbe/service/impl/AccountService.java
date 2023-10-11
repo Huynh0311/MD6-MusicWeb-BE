@@ -44,6 +44,7 @@ public class AccountService implements UserDetailsService, IAccountService {
         account.setEmail(registerRequest.getEmail());
         account.setImg(registerRequest.getImg());
         account.setPhone(registerRequest.getPhone());
+        account.setRole(registerRequest.getRole());
         iAccountRepository.save(account);
     }
 
