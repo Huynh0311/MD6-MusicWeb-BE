@@ -30,16 +30,6 @@ public class CommentController {
     }
     @GetMapping("/{id}")
     public ResponseEntity<List<Comment>>getAllCommentBySongID(@PathVariable int id){
-        List<Comment>commentList = iCommentService.findCommentBySongID(id);
-        for(int i =0 ;i<commentList.size();i++){
-            Account account = commentList.get(i).getAccount();
-            AccountDTO2 accountDTO = new AccountDTO2();
-            Account account1 = new Account();
-            BeanUtils.copyProperties(account,accountDTO);
-            BeanUtils.copyProperties(accountDTO,account1);
-            commentList.get(i).setAccount(account1);
-        }
-
         return new ResponseEntity<>(iCommentService.findCommentBySongID(id),HttpStatus.OK);
     }
 }

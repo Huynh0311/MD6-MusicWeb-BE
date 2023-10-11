@@ -8,4 +8,6 @@ import java.util.List;
 public interface ISingerService extends IService<Singer> {
     Singer findSingerBySongID(int id);
     List<Singer> findListSingerBySongID(int id);
+
+    Singer findSingerByAccountID(int id);
 }
