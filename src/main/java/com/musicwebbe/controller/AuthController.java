@@ -46,7 +46,7 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account userInfo = accountService.findByEmail(loginRequest.getEmail());
         return ResponseEntity.ok(new JwtResponse(userInfo.getId(), jwt,
-                userInfo.getEmail(), userInfo.getName(), userInfo.getImg(), userDetails.getAuthorities()));
+                userInfo.getEmail(), userInfo.getName(), userInfo.getImg(), userDetails.getAuthorities(),userInfo.isAuth()));
     }
 
     @PostMapping(value = "/register")

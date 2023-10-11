@@ -29,4 +29,10 @@ public interface ISingerRepository extends JpaRepository<Singer,Integer> {
     List<Singer> deleteSingerBySongId(@Param("idsong")  int idsong);
     @Query(nativeQuery = true,value ="select sg.* from Singer sg inner join singer_song ss on ss.singer_id=sg.id inner join song s on ss.song_id=s.id where s.id like %:id")
     List<Singer> findListSingerBySongID(@Param("id") int id);
+
+    @Query(nativeQuery = true,value ="select sg.* from Singer sg inner join account a on sg.account_id = a.id where a.id=:id")
+    Singer findSingerByAccountID(@Param("id") int id);
+
+//    @Query(nativeQuery = true,value ="select sg.* from singer_song sg where sg.song_id=:id")
+//    Singer findSingerBySongID(@Param("id") int id);
 }

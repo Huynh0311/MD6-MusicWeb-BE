@@ -1,13 +1,22 @@
 package com.musicwebbe.service;
 
+import com.musicwebbe.model.Account;
+import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.model.Song;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+
 import java.util.List;
 
 
 public interface ISongService extends IService<Song> {
-    Song findSongByIDHQL (int id);
-    List<Song> findAllSongByGenresID(int id);
+    Song findSongByIDHQLAuth (int id);
+    Song findSongByIDHQLNotAuth(int id);
+    List<Song> findAllSongByGenresIDAuth(int id);
+
+    List<Song> findAllSongByGenresIDNotAuth(int id);
 
     List<Song> getAll();
     List<Song> findTop5ByPlaysDesc();
@@ -21,4 +30,8 @@ public interface ISongService extends IService<Song> {
     SongDTO2 editaSong(SongDTO2 songDTO2);
 
     void deleteaSong(int id);
+    public Song addSong(Account account, Song song);
+    public SongDTO findSongById(Account account, int id);
+
+    public List<SongDTO> getAllSongByGenresID(Account account,Song song);
 }
