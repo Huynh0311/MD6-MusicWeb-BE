@@ -46,13 +46,29 @@ public class AuthController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<?> register(@RequestBody Account account) {
-        String password = passwordEncoder.encode(account.getPassword());
-        account.setPassword(password);
+        if (!account.getPassword().isEmpty()){
+            String password = passwordEncoder.encode(account.getPassword());
+            account.setPassword(password);
+        }
         boolean check = accountService.add(account);
         if (check) {
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(account,HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+    @RequestMapping(value = "/check", method = RequestMethod.POST)
+    public ResponseEntity<?> check(@RequestBody Account account) {
+        boolean check = true;
+        Account accountCheck = null;
+        if (accountService.findAccountByEmail(account.getEmail()).isPresent()){
+            accountCheck = accountService.findAccountByEmail(account.getEmail()).get();
+            check = false;
+        }
+        if (!check) {
+            return new ResponseEntity<>(accountCheck,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(account,HttpStatus.BAD_REQUEST);
         }
     }
 }
