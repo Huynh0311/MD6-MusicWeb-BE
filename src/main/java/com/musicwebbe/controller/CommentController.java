@@ -28,7 +28,7 @@ public class CommentController {
         comment.setTimeComment(LocalDate.from(commentTime));
         return new  ResponseEntity<> (iCommentService.save(comment), HttpStatus.OK);
     }
-    @GetMapping("/{id}")
+    @GetMapping("/getAll/{id}")
     public ResponseEntity<List<Comment>>getAllCommentBySongID(@PathVariable int id){
         return new ResponseEntity<>(iCommentService.findCommentBySongID(id),HttpStatus.OK);
     }

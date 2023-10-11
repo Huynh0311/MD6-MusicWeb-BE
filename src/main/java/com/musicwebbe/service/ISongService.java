@@ -12,11 +12,6 @@ import java.util.List;
 
 
 public interface ISongService extends IService<Song> {
-    Song findSongByIDHQLAuth (int id);
-    Song findSongByIDHQLNotAuth(int id);
-    List<Song> findAllSongByGenresIDAuth(int id);
-
-    List<Song> findAllSongByGenresIDNotAuth(int id);
 
     List<Song> getAll();
     List<Song> findTop5ByPlaysDesc();
@@ -31,7 +26,7 @@ public interface ISongService extends IService<Song> {
 
     void deleteaSong(int id);
     public Song addSong(Account account, Song song);
-    public SongDTO findSongById(Account account, int id);
+    public SongDTO findSongById(int id);
 
-    public List<SongDTO> getAllSongByGenresID(Account account,Song song);
+    public List<SongDTO> getAllSongByGenresID(Song song);
 }

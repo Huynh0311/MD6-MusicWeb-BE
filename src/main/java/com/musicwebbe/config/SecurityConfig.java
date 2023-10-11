@@ -80,6 +80,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/apiAccount/**").permitAll()
                 .antMatchers("/genres").permitAll()
                 .antMatchers("/songs/**").permitAll()
+                .antMatchers("/comments/getAll/**").permitAll()
+                .antMatchers("/songs/getByGenresID/**").permitAll()
                 .antMatchers("/apiAccount/auth/**").permitAll()
                 // add test -----------
                 .antMatchers(HttpMethod.GET, "/songs/**").permitAll()
@@ -93,7 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**").hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.POST, "/apiAccount/save**").hasAnyRole("USER", "ADMIN")
                 .antMatchers(HttpMethod.POST, "/api/candies/**", "/api/categories/**","/songs/add").hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.POST, "/apiAccount/save**").hasAnyRole("USER")
+                .antMatchers(HttpMethod.POST, "/apiAccount/save**","/comments/add").hasAnyRole("USER")
                 .anyRequest().authenticated()
                 .and().csrf().disable();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
