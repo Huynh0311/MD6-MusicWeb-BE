@@ -99,7 +99,7 @@ public class SongService implements ISongService {
                     songDTO2.setPathSong(song.getPathSong());
                     songDTO2.setDescription(song.getDescription());
                     songDTO2.setLikeQuantity(likesRepository.getLikeQuantity(song.getId()));
-                    songDTO2.setSingers(isingerRepository.getSinger(song.getId()));
+                    songDTO2.setNameSinger(song.getNameSinger());
                     return songDTO2;
                 })
                 .collect(Collectors.toList());
@@ -111,8 +111,7 @@ public class SongService implements ISongService {
         Optional<Song>songOptional = iSongRepository.findById(id);
         Song song = songOptional.get();
         int likeQuantity = likesRepository.getLikeQuantity(id);
-        List<String> singers = isingerRepository.getSinger(id);
-        return new SongDTO2(song, likeQuantity, singers);
+        return new SongDTO2(song, likeQuantity);
     }
 
     @Override
@@ -130,11 +129,6 @@ public class SongService implements ISongService {
         existingSong.setDescription(songDTO2.getDescription());
         Song savedSong = iSongRepository.save(existingSong);
 
-        isingerRepository.deleteSingerBySongId(songDTO2.getId());
-        iSingerSongRepository.deleteBySongId(songDTO2.getId());
-
-        List<String> singers = isingerRepository.getSinger(songDTO2.getId());
-
-        return new SongDTO2(savedSong, likesRepository.getLikeQuantity(songDTO2.getId()),singers);
+        return new SongDTO2(savedSong, likesRepository.getLikeQuantity(songDTO2.getId()));
     }
 }
