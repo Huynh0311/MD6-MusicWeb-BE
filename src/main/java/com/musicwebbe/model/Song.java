@@ -25,4 +25,5 @@ public class Song {
     private String nameSinger;
     @ManyToOne
     private Account account;
+
 }

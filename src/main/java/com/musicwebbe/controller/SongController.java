@@ -128,4 +128,22 @@ public class SongController {
         }
         return null;
     }
+
+    @GetMapping("/findByName/{name}")
+    public ResponseEntity<List<Song>> findListSongByName(@PathVariable String name) {
+        List<Song> songList = iSongService.findListSongByName(name);
+        return ResponseEntity.ok(songList);
+    }
+
+    @GetMapping("/findBySingerName/{name}")
+    public ResponseEntity<List<Song>> findListSongByNameSinger(@PathVariable String name) {
+        List<Song> songList = iSongService.findListSongByNameSinger(name);
+        return ResponseEntity.ok(songList);
+    }
+
+    @GetMapping("/findByPlaylist/{name}")
+    public ResponseEntity<List<List<SongDTO>>> findListSongByPlaylist(@PathVariable String name) {
+        List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name);
+        return ResponseEntity.ok(songList);
+    }
 }
