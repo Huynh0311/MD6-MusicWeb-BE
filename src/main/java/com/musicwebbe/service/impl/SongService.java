@@ -48,6 +48,12 @@ public class SongService implements ISongService {
         iSongRepository.deleteById(id);
     }
 
+
+    @Override
+    public List<Song> searchSongByNameSong(String search) {
+        return iSongRepository.searchSongByNameSong(search);
+    }
+
     @Override
     public Song findById(int id) {
         return iSongRepository.findById(id).get();

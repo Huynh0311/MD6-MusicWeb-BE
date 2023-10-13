@@ -1,4 +1,8 @@
 package com.musicwebbe.service;
 
-public interface IPlaylistService {
+import com.musicwebbe.model.Account;
+import com.musicwebbe.model.Playlist;
+
+public interface IPlaylistService extends IService<Playlist>{
+    Account getAccount(int id);
 }

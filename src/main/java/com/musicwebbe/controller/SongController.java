@@ -8,6 +8,7 @@ import com.musicwebbe.service.ISingerService;
 import com.musicwebbe.service.ISingerSongService;
 import com.musicwebbe.service.ISongService;
 import com.musicwebbe.service.impl.AccountService;
+import com.musicwebbe.service.impl.SongService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -29,6 +30,8 @@ import java.util.List;
 public class SongController {
     @Autowired
     ISongService iSongService;
+    @Autowired
+    SongService songService;
     @Autowired
     AccountService accountService;
     @Autowired
@@ -174,5 +177,9 @@ public class SongController {
         if (songDTO2.getId() == id) {
             return new ResponseEntity<>(iSongService.editaSong(songDTO2), HttpStatus.OK);
         } return null;
+    }
+    @GetMapping("/search")
+    public ResponseEntity<List<Song>> topSong(@RequestParam(required = false, defaultValue = "") String search) {
+        return new ResponseEntity<>(songService.searchSongByNameSong(search), HttpStatus.OK);
     }
 }
