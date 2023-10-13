@@ -19,7 +19,8 @@ public class SongDTO {
     private LocalDate timeCreate;
     private String description;
     private String pathSong;
-    private String[] singerName;
+    private String NameSinger;
     private int accountID;
     private String accountName;
+    private boolean isAuth;
 }

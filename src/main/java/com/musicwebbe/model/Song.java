@@ -12,6 +12,7 @@ public class Song {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String nameSong;
+    @Lob
     private String imgSong;
     private int plays;
     @ManyToOne
@@ -22,4 +23,6 @@ public class Song {
     @Lob
     private String pathSong;
     private String nameSinger;
+    @ManyToOne
+    private Account account;
 }

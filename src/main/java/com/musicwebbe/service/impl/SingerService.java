@@ -46,4 +46,9 @@ public class SingerService implements ISingerService {
     public List<Singer> findListSingerBySongID(int id) {
         return iSingerRepository.findListSingerBySongID(id);
     }
+
+    @Override
+    public Singer findSingerByAccountID(int id) {
+        return iSingerRepository.findSingerByAccountID(id);
+    }
 }
