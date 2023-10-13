@@ -46,6 +46,9 @@ public class SongService implements ISongService {
     @Autowired
     IAccountRepository iAccountRepository;
 
+    @Autowired
+    IPlaylistRepository iPlaylistRepository;
+
 
     @Override
     public Song save(Song song) {
@@ -179,4 +182,27 @@ public class SongService implements ISongService {
         return songDTOList;
     }
 
+    @Override
+    public List<Song> findListSongByName(String name) {
+        return iSongRepository.findListSongByName(name);
+    }
+
+    @Override
+    public List<Song> findListSongByNameSinger(String name) {
+        List<Song> songList = iSongRepository.findListSongByNameSinger(name);
+         return songList;
+    }
+
+    @Override
+    public List<List<SongDTO>> findListSongByPlaylist(String name) {
+        List<Playlist> playlist = iPlaylistRepository.findAllPlaylistByNamePlaylist(name);
+        List<List<SongDTO>>parentList = new ArrayList<>();
+        for(Playlist playlist1 : playlist) {
+            List<Song> songList = iSongRepository.findListSongByPlaylistName(playlist1.getNamePlaylist(),playlist1.getId());
+            List<SongDTO> songDTOList;
+            songDTOList = songList.stream().map(song -> new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getAccount().getId(),playlist1.getPlaylistImg(),playlist1.getNamePlaylist())).collect(Collectors.toList());
+            parentList.add(songDTOList);
+        }
+        return parentList;
+    }
 }
