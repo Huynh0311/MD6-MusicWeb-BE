@@ -2,6 +2,7 @@ package com.musicwebbe.service.impl;
 
 import com.musicwebbe.model.*;
 import com.musicwebbe.model.dto.SongDTO;
+import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.repository.*;
 
 import com.musicwebbe.model.Song;
@@ -12,11 +13,7 @@ import com.musicwebbe.service.ISingerSongService;
 import com.musicwebbe.service.ISongService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -45,6 +42,9 @@ public class SongService implements ISongService {
 
     @Autowired
     IAccountRepository iAccountRepository;
+
+    @Autowired
+    ILikesRepository iLikesRepository;
 
 
     @Override
@@ -180,6 +180,18 @@ public class SongService implements ISongService {
             songDTOList.add(songDTO);
         }
         return songDTOList;
+    }
+
+    @Override
+    public List<SongFavorite> getAllFavoritesByUser(String username) {
+        List<SongFavorite> listSongFavorite = new ArrayList<>();
+        List<Likes> likesList = iLikesRepository.findAllByAccountEmail(username);
+        for (Likes likes : likesList){
+            SongFavorite songFavorite = new SongFavorite();
+            BeanUtils.copyProperties(likes.getSong(), songFavorite);
+            listSongFavorite.add(songFavorite);
+        }
+        return listSongFavorite;
     }
 
 }

@@ -1,9 +1,11 @@
 package com.musicwebbe.controller;
 
+import com.musicwebbe.exeption.EmailExitsException;
 import com.musicwebbe.model.*;
 import com.musicwebbe.model.dto.AccountDTO;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.model.dto.SongDTO2;
+import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.service.ISingerService;
 import com.musicwebbe.service.ISingerSongService;
 import com.musicwebbe.service.ISongService;

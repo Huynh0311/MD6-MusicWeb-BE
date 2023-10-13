@@ -2,6 +2,7 @@ package com.musicwebbe.controller;
 
 import com.musicwebbe.model.Likes;
 import com.musicwebbe.model.Song;
+import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.service.ILikesService;
 import com.musicwebbe.service.ISongService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -47,4 +49,5 @@ public class LikesController {
         Integer songLikedQuantity = iLikesService.getLikeQuantity2(id);
         return ResponseEntity.ok(songLikedQuantity != null ? songLikedQuantity : 0);
     }
+
 }

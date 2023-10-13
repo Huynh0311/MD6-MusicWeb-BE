@@ -1,11 +1,16 @@
 package com.musicwebbe.controller;
 
 import com.musicwebbe.model.Account;
+import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.service.IAccountService;
+import com.musicwebbe.service.ISongService;
 import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,11 +22,13 @@ import java.util.List;
 public class AccountController {
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    IAccountService iAccountService;
+    private IAccountService iAccountService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ISongService iSongService;
 
     @GetMapping("/all")
     public List<Account> getAll() {
@@ -58,5 +65,16 @@ public class AccountController {
     @PostMapping("/findById/{id}")
     public Account findById(@PathVariable int id) {
         return iAccountService.findById(id);
+    }
+
+    @GetMapping("/favorites")
+    public ResponseEntity<List<SongFavorite>> songFavorite() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<SongFavorite> songs = iSongService.getAllFavoritesByUser(userDetails.getUsername());
+        if (songs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(songs, HttpStatus.OK);
     }
 }
