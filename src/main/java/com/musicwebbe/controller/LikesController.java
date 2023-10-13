@@ -22,14 +22,11 @@ public class LikesController {
     ISongService iSongService;
 
     @PostMapping("/check")
-    public ResponseEntity<Integer> likeCheckAndSet(@RequestBody Likes likes) {
+    public ResponseEntity<Integer> likeCheck(@RequestBody Likes likes) {
         int idSong = likes.getSong().getId();
         int idAccount = likes.getAccount().getId();
-        if (idSong == 0 || idAccount == 0) {
-            return null;
-        }
-        int result = iLikesService.isLiked(idSong, idAccount);
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        int checkResult = iLikesService.likeChecking(idAccount, idSong);
+        return new ResponseEntity<>(checkResult, HttpStatus.OK);
     }
 
     @Transactional
@@ -40,19 +37,8 @@ public class LikesController {
         if (idSong == 0 || idAccount == 0) {
             return null;
         }
-        int result = iLikesService.isLiked(idSong, idAccount);
-        if (result == 1) {
-            result = 0;
-            iLikesService.removeLikeBySongIDAndAccountID(idSong, idAccount);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        } else {
-            result = 1;
-            Likes like = new Likes();
-            like.setAccount(likes.getAccount());
-            like.setSong(likes.getSong());
-            iLikesService.save(like);
-            return new ResponseEntity<>(result, HttpStatus.OK);
-        }
+        int result = iLikesService.setLiked(idAccount, idSong, likes);
+        return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
 

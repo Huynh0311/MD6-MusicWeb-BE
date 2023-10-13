@@ -14,13 +14,16 @@ public class JwtResponse {
     private String img;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public JwtResponse(int id, String token, String username, String name,String img, Collection<? extends GrantedAuthority> authorities) {
+    private boolean isAuth;
+
+    public JwtResponse(int id, String token, String username, String name,String img, Collection<? extends GrantedAuthority> authorities,boolean isAuth) {
         this.id = id;
         this.token = token;
         this.username = username;
         this.name = name;
         this.img = img;
         this.authorities = authorities;
+        this.isAuth = isAuth;
     }
 
     public String getName() {
@@ -65,6 +68,14 @@ public class JwtResponse {
 
     public String getUsername() {
         return username;
+    }
+
+    public boolean isAuth() {
+        return isAuth;
+    }
+
+    public void setAuth(boolean auth) {
+        isAuth = auth;
     }
 
     public void setUsername(String username) {

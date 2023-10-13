@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -39,63 +40,27 @@ public class SongController {
     @Autowired
     ISingerSongService iSingerSongService;
 
-    @PostMapping("/add")
-    public ResponseEntity<Song> addSong(@RequestParam("pathImg") String imgSong,
-                                        @RequestParam(value = "pathSong") String pathSong,
-                                        @RequestParam(value = "nameSong") String nameSong,
-                                        @RequestParam(value = "genres_id") int genres_id,
-                                        @RequestParam(value = "singer") String[] singer,
-                                        @RequestParam(value = "description") String description) {
-        String email = "huynh111@gmail.com";
+    public Account getCurrentAccount() {
+        String email = "";
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication.isAuthenticated()) {
-//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//            email = userDetails.getUsername();
-//        }
-        Account account = accountService.findByEmail(email);
-        Song song = new Song();
-        song.setImgSong(imgSong);
-        song.setPathSong(pathSong);
-        song.setPlays(0);
-        song.setNameSong(nameSong);
-
-
-        Genres genres = new Genres();
-        genres.setId(genres_id);
-        song.setGenres(genres);
-        song.setDescription(description);
-        song.setTimeCreate(LocalDate.now());
-        iSongService.save(song);
-
-
-        for (String sing : singer) {
-            Singer singer1 = new Singer();
-            String nameSinger = new String();
-            nameSinger = sing;
-            singer1.setNameSinger(nameSinger);
-            singer1.setAccount(account);
-            iSingerService.save(singer1);
-            SingerSong singerSong = new SingerSong();
-            singerSong.setSong(song);
-            singerSong.setSinger(singer1);
-            iSingerSongService.save(singerSong);
+        if (authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            email = userDetails.getUsername();
         }
-        return new ResponseEntity<>(song,HttpStatus.OK);
+        Account account = accountService.findByEmail(email);
+        return account;
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Song> addSong(@RequestBody Song song) {
+        Account account = getCurrentAccount();
+        Song savedSong = iSongService.addSong(account, song);
+        return new ResponseEntity<>(savedSong, HttpStatus.OK);
     }
 
     @GetMapping("/find/{id}")
     public ResponseEntity<SongDTO> findSongByID(@PathVariable int id) {
-        Song song = iSongService.findSongByIDHQL(id);
-        List<Singer> singerList = iSingerService.findListSingerBySongID(id);
-        String[]nameList = new String[singerList.size()];
-        for(int i = 0;i<singerList.size();i++) {
-            nameList[i]=singerList.get(i).getNameSinger();
-        }
-        SongDTO songDTO = new SongDTO();
-        songDTO.setSingerName(nameList);
-        BeanUtils.copyProperties(song, songDTO);
-        songDTO.setAccountName(singerList.get(0).getAccount().getName());
-        songDTO.setAccountID(singerList.get(0).getAccount().getId());
+        SongDTO songDTO = iSongService.findSongById(id);
         if (songDTO == null) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
@@ -113,28 +78,13 @@ public class SongController {
     }
 
     @GetMapping("/getByGenresID/{id}")
-    public ResponseEntity<List<SongDTO>>findAllSongByGenresID(@PathVariable int id){
+    public ResponseEntity<List<SongDTO>> findAllSongByGenresID(@PathVariable int id) {
         Song song = iSongService.findById(id);
-        if(song==null){
+        if (song == null) {
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
-        int songGenresID = song.getGenres().getId();
-//        List<Song>songList = iSongService.findAllSongByGenresID(songGenresID);
-        List<Song> songList=iSongService.findAllSongByGenresID(songGenresID);
-        List<SongDTO>songDTOList = new ArrayList<>();
-        for(Song aSong : songList){
-            List<Singer> singerList = iSingerService.findListSingerBySongID(aSong.getId());
-            SongDTO songDTO = new SongDTO();
-            BeanUtils.copyProperties(aSong,songDTO);
-            String[]nameList = new String[singerList.size()];
-            for(int i = 0;i<singerList.size();i++) {
-                nameList[i]=singerList.get(i).getNameSinger();
-            }
-            songDTO.setSingerName(nameList);
-            songDTOList.add(songDTO);
-        }
-
-        return new ResponseEntity<>(songDTOList,HttpStatus.OK);
+        List<SongDTO> listSongDTO = iSongService.getAllSongByGenresID(song);
+        return new ResponseEntity<>(listSongDTO, HttpStatus.OK);
     }
 
     @GetMapping("/getall")
@@ -145,6 +95,7 @@ public class SongController {
         }
         return new ResponseEntity<>(songs, HttpStatus.OK);
     }
+
     @GetMapping("/top5ByPlays")
     public List<Song> getTop5SongsByPlays() {
         List<Song> top5Songs = iSongService.findTop5ByPlaysDesc();
@@ -176,7 +127,8 @@ public class SongController {
     public ResponseEntity<SongDTO2> editaSong(@PathVariable int id, @RequestBody SongDTO2 songDTO2) {
         if (songDTO2.getId() == id) {
             return new ResponseEntity<>(iSongService.editaSong(songDTO2), HttpStatus.OK);
-        } return null;
+        }
+        return null;
     }
     @GetMapping("/search")
     public ResponseEntity<List<Song>> topSong(@RequestParam(required = false, defaultValue = "") String search) {
