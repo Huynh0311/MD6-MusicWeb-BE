@@ -4,13 +4,14 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Data
 public class Song {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String nameSong;
     @Lob
     private String imgSong;
@@ -25,5 +26,7 @@ public class Song {
     private String nameSinger;
     @ManyToOne
     private Account account;
+    @OneToMany(mappedBy = "song")
+    private List<Comment> comments;
 
 }

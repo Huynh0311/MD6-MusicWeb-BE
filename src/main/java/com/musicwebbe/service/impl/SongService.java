@@ -1,6 +1,7 @@
 package com.musicwebbe.service.impl;
 
 import com.musicwebbe.model.*;
+import com.musicwebbe.model.dto.CommentDTO;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.repository.*;
 
@@ -116,10 +117,21 @@ public class SongService implements ISongService {
 
     @Override
     public SongDTO2 getaSong(int id) {
-        Optional<Song>songOptional = iSongRepository.findById(id);
-        Song song = songOptional.get();
+        Song song = iSongRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm được bài hát"));
         int likeQuantity = likesRepository.getLikeQuantity(id);
-        return new SongDTO2(song, likeQuantity);
+        SongDTO2 songDTO2 = new SongDTO2(song, likeQuantity);
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        if (!song.getComments().isEmpty()) {
+            CommentDTO commentDTO = new CommentDTO();
+            for (Comment comment : song.getComments()) {
+                commentDTO.setAccountName(comment.getAccount().getName());
+                commentDTO.setTimeComment(comment.getTimeComment());
+                commentDTO.setContent(comment.getContent());
+                commentDTOS.add(commentDTO);
+            }
+        }
+        songDTO2.setComments(commentDTOS);
+        return songDTO2;
     }
 
     @Override

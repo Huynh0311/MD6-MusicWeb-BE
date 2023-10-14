@@ -39,19 +39,26 @@ public class SongController {
     ISingerSongService iSingerSongService;
 
     public Account getCurrentAccount() {
-        String email = "";
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            email = userDetails.getUsername();
+        try {
+            String email = "";
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication.isAuthenticated()) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                email = userDetails.getUsername();
+            }
+            return accountService.findByEmail(email);
+
+        } catch (Exception e) {
+            return null;
         }
-        Account account = accountService.findByEmail(email);
-        return account;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Song> addSong(@RequestBody Song song) {
+    @PostMapping
+    public ResponseEntity<?> addSong(@RequestBody Song song) {
         Account account = getCurrentAccount();
+        if (account == null) {
+            return new ResponseEntity<>("Vui lòng đăng nhập", HttpStatus.UNAUTHORIZED);
+        }
         Song savedSong = iSongService.addSong(account, song);
         return new ResponseEntity<>(savedSong, HttpStatus.OK);
     }
