@@ -13,4 +13,6 @@ public class Playlist {
     private String namePlaylist;
     @ManyToOne
     private Account account;
+    @Lob
+    private String playlistImg;
 }

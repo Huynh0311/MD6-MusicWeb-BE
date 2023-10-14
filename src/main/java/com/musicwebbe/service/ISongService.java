@@ -24,12 +24,15 @@ public interface ISongService extends IService<Song> {
     SongDTO2 editaSong(SongDTO2 songDTO2);
 
     void deleteaSong(int id);
-
     Song addSong(Account account, Song song);
-
     SongDTO findSongById(int id);
 
     List<SongDTO> getAllSongByGenresID(Song song);
+
+    List<Song> findListSongByName(String name);
+
+    List<Song> findListSongByNameSinger(String name);
+    List<List<SongDTO>> findListSongByPlaylist(String name);
 
     List<SongFavorite> getAllFavoritesByUser(String username);
 }
