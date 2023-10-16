@@ -32,8 +32,6 @@ public class SongController {
     @Autowired
     ISongService iSongService;
     @Autowired
-    SongService songService;
-    @Autowired
     AccountService accountService;
     @Autowired
     ISingerService iSingerService;
@@ -129,9 +127,5 @@ public class SongController {
             return new ResponseEntity<>(iSongService.editaSong(songDTO2), HttpStatus.OK);
         }
         return null;
-    }
-    @GetMapping("/search")
-    public ResponseEntity<List<Song>> topSong(@RequestParam(required = false, defaultValue = "") String search) {
-        return new ResponseEntity<>(songService.searchSongByNameSong(search), HttpStatus.OK);
     }
 }

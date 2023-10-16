@@ -15,8 +15,6 @@ public interface ISongService extends IService<Song> {
 
     List<Song> getAll();
     List<Song> findTop5ByPlaysDesc();
-    List<Song> searchSongByNameSong(String search);
-
     void delete(int id);
     List<SongDTO2> getAllSong();
 

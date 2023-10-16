@@ -16,9 +16,6 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
     List<Song> findAllSongByGenresID(@Param("id")int id);
     @Query(value = "SELECT s FROM Song s ORDER BY s.plays DESC ")
     List<Song> findTop5ByPlaysDesc();
-    @Query(value = "SELECT * FROM Song" +
-            " WHERE name_song  LIKE CONCAT('%', :search , '%' )",nativeQuery = true)
-    List<Song> searchSongByNameSong(@Param("search") String search);
 
     void deleteById(int id);
 

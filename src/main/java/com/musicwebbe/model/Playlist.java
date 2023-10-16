@@ -14,6 +14,4 @@ public class Playlist {
     @ManyToOne
     private Account account;
     private String imgPlaylist;
-    private Integer likeCount;
-
 }
