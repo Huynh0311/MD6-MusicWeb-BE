@@ -39,19 +39,26 @@ public class SongController {
     ISingerSongService iSingerSongService;
 
     public Account getCurrentAccount() {
-        String email = "";
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            email = userDetails.getUsername();
+        try {
+            String email = "";
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication.isAuthenticated()) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                email = userDetails.getUsername();
+            }
+            return accountService.findByEmail(email);
+
+        } catch (Exception e) {
+            return null;
         }
-        Account account = accountService.findByEmail(email);
-        return account;
     }
 
-    @PostMapping("/add")
-    public ResponseEntity<Song> addSong(@RequestBody Song song) {
+    @PostMapping
+    public ResponseEntity<?> addSong(@RequestBody Song song) {
         Account account = getCurrentAccount();
+        if (account == null) {
+            return new ResponseEntity<>("Vui lòng đăng nhập", HttpStatus.UNAUTHORIZED);
+        }
         Song savedSong = iSongService.addSong(account, song);
         return new ResponseEntity<>(savedSong, HttpStatus.OK);
     }
@@ -127,5 +134,23 @@ public class SongController {
             return new ResponseEntity<>(iSongService.editaSong(songDTO2), HttpStatus.OK);
         }
         return null;
+    }
+
+    @GetMapping("/findByName/{name}")
+    public ResponseEntity<List<Song>> findListSongByName(@PathVariable String name) {
+        List<Song> songList = iSongService.findListSongByName(name);
+        return ResponseEntity.ok(songList);
+    }
+
+    @GetMapping("/findBySingerName/{name}")
+    public ResponseEntity<List<Song>> findListSongByNameSinger(@PathVariable String name) {
+        List<Song> songList = iSongService.findListSongByNameSinger(name);
+        return ResponseEntity.ok(songList);
+    }
+
+    @GetMapping("/findByPlaylist/{name}")
+    public ResponseEntity<List<List<SongDTO>>> findListSongByPlaylist(@PathVariable String name) {
+        List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name);
+        return ResponseEntity.ok(songList);
     }
 }

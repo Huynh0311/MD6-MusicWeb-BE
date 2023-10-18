@@ -25,10 +25,10 @@ public class SongDTO2 {
     private String description;
     private String pathSong;
     private int likeQuantity;
-    private List<String> singers;
+    private String nameSinger;
+    private List<CommentDTO> comments;
 
-
-    public SongDTO2(Song song, int likeQuantity, List<String> singers) {
+    public SongDTO2(Song song, int likeQuantity) {
         this.id = song.getId();
         this.nameSong = song.getNameSong();
         this.imgSong = song.getImgSong();
@@ -38,7 +38,7 @@ public class SongDTO2 {
         this.description = song.getDescription();
         this.pathSong = song.getPathSong();
         this.likeQuantity = likeQuantity;
-        this.singers = singers;
+        this.nameSinger = song.getNameSinger();
     }
 
 }

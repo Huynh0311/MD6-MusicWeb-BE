@@ -1,6 +1,7 @@
 package com.musicwebbe.service.impl;
 
 import com.musicwebbe.model.*;
+import com.musicwebbe.model.dto.CommentDTO;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.repository.*;
 
@@ -45,6 +46,9 @@ public class SongService implements ISongService {
 
     @Autowired
     IAccountRepository iAccountRepository;
+
+    @Autowired
+    IPlaylistRepository iPlaylistRepository;
 
 
     @Override
@@ -105,7 +109,7 @@ public class SongService implements ISongService {
                     songDTO2.setPathSong(song.getPathSong());
                     songDTO2.setDescription(song.getDescription());
                     songDTO2.setLikeQuantity(likesRepository.getLikeQuantity(song.getId()));
-                    songDTO2.setSingers(isingerRepository.getSinger(song.getId()));
+                    songDTO2.setNameSinger(song.getNameSinger());
                     return songDTO2;
                 })
                 .collect(Collectors.toList());
@@ -114,16 +118,28 @@ public class SongService implements ISongService {
 
     @Override
     public SongDTO2 getaSong(int id) {
-        Optional<Song> songOptional = iSongRepository.findById(id);
-        Song song = songOptional.get();
+        Song song = iSongRepository.findById(id).orElseThrow(() -> new RuntimeException("Không tìm được bài hát"));
         int likeQuantity = likesRepository.getLikeQuantity(id);
-        List<String> singers = isingerRepository.getSinger(id);
-        return new SongDTO2(song, likeQuantity, singers);
+        SongDTO2 songDTO2 = new SongDTO2(song, likeQuantity);
+        List<CommentDTO> commentDTOS = new ArrayList<>();
+        if (!song.getComments().isEmpty()) {
+            CommentDTO commentDTO = new CommentDTO();
+            for (Comment comment : song.getComments()) {
+                commentDTO.setAccountName(comment.getAccount().getName());
+                commentDTO.setTimeComment(comment.getTimeComment());
+                commentDTO.setContent(comment.getContent());
+                commentDTOS.add(commentDTO);
+            }
+        }
+        songDTO2.setComments(commentDTOS);
+        return songDTO2;
     }
 
     @Override
     public SongDTO2 editaSong(SongDTO2 songDTO2) {
+
         Song existingSong = iSongRepository.findById(songDTO2.getId()).get();
+
         existingSong.setId(songDTO2.getId());
         existingSong.setNameSong(songDTO2.getNameSong());
         existingSong.setImgSong(songDTO2.getImgSong());
@@ -132,14 +148,10 @@ public class SongService implements ISongService {
         existingSong.setTimeCreate(songDTO2.getTimeCreate());
         existingSong.setPathSong(songDTO2.getPathSong());
         existingSong.setDescription(songDTO2.getDescription());
+        existingSong.setNameSinger(songDTO2.getNameSinger());
         Song savedSong = iSongRepository.save(existingSong);
 
-        isingerRepository.deleteSingerBySongId(songDTO2.getId());
-        iSingerSongRepository.deleteBySongId(songDTO2.getId());
-
-        List<String> singers = isingerRepository.getSinger(songDTO2.getId());
-
-        return new SongDTO2(savedSong, likesRepository.getLikeQuantity(songDTO2.getId()), singers);
+        return new SongDTO2(savedSong, likesRepository.getLikeQuantity(songDTO2.getId()));
     }
 
     @Override
@@ -183,4 +195,27 @@ public class SongService implements ISongService {
         return songDTOList;
     }
 
+    @Override
+    public List<Song> findListSongByName(String name) {
+        return iSongRepository.findListSongByName(name);
+    }
+
+    @Override
+    public List<Song> findListSongByNameSinger(String name) {
+        List<Song> songList = iSongRepository.findListSongByNameSinger(name);
+         return songList;
+    }
+
+    @Override
+    public List<List<SongDTO>> findListSongByPlaylist(String name) {
+        List<Playlist> playlist = iPlaylistRepository.findAllPlaylistByNamePlaylist(name);
+        List<List<SongDTO>>parentList = new ArrayList<>();
+        for(Playlist playlist1 : playlist) {
+            List<Song> songList = iSongRepository.findListSongByPlaylistName(playlist1.getNamePlaylist(),playlist1.getId());
+            List<SongDTO> songDTOList;
+            songDTOList = songList.stream().map(song -> new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getAccount().getId(),playlist1.getPlaylistImg(),playlist1.getNamePlaylist())).collect(Collectors.toList());
+            parentList.add(songDTOList);
+        }
+        return parentList;
+    }
 }

@@ -4,9 +4,12 @@ package com.musicwebbe.service.impl;
 import com.musicwebbe.exeption.EmailExitsException;
 import com.musicwebbe.model.Account;
 import com.musicwebbe.model.AccountPrinciple;
+import com.musicwebbe.model.Role;
 import com.musicwebbe.repository.IAccountRepository;
+import com.musicwebbe.repository.IRoleRepository;
 import com.musicwebbe.request.RegisterRequest;
 import com.musicwebbe.service.IAccountService;
+import com.musicwebbe.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,6 +29,9 @@ public class AccountService implements UserDetailsService, IAccountService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    IRoleRepository iRoleRepository;
+
     public Account findByEmail(String email) {
         return iAccountRepository.findAllByEmail(email);
     }
@@ -39,12 +45,17 @@ public class AccountService implements UserDetailsService, IAccountService {
             throw new EmailExitsException("Email đã tồn tại");
         }
         Account account = new Account();
+        if (registerRequest.getRole() == null) {
+            Role role = iRoleRepository.findByName("ROLE_USER");
+            account.setRole(role);
+        } else {
+            account.setRole(registerRequest.getRole());
+        }
         account.setName(registerRequest.getName());
         account.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         account.setEmail(registerRequest.getEmail());
         account.setImg(registerRequest.getImg());
         account.setPhone(registerRequest.getPhone());
-        account.setRole(registerRequest.getRole());
         iAccountRepository.save(account);
     }
 

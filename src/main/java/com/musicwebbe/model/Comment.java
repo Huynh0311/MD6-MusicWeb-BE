@@ -15,6 +15,7 @@ public class Comment {
     @ManyToOne
     private Account account;
     @ManyToOne
+    @JoinColumn(name="song_id", nullable=false)
     private Song song;
     @Lob
     private String content;
