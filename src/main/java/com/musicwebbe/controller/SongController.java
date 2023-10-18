@@ -128,4 +128,10 @@ public class SongController {
         }
         return null;
     }
+
+    @GetMapping("/account")
+    public ResponseEntity<List<Song>> getAllSongByAccountId() {
+        List<Song> song = iSongService.getAllSongByAccountId(getCurrentAccount().getId());
+        return ResponseEntity.ok(song);
+    }
 }

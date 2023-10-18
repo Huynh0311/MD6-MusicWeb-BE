@@ -29,4 +29,6 @@ public interface ISongService extends IService<Song> {
     public SongDTO findSongById(int id);
 
     public List<SongDTO> getAllSongByGenresID(Song song);
+
+    public List<Song> getAllSongByAccountId(int id);
 }

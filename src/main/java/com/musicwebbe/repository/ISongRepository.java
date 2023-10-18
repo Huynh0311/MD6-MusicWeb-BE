@@ -19,4 +19,6 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
 
     void deleteById(int id);
 
+    List<Song> getAllByAccount_Id(int id);
+
 }

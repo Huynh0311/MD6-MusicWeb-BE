@@ -179,4 +179,8 @@ public class SongService implements ISongService {
         return songDTOList;
     }
 
+    public List<Song> getAllSongByAccountId(int id) {
+        return iSongRepository.getAllByAccount_Id(id);
+    }
+
 }
