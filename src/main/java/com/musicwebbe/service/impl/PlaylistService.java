@@ -4,6 +4,7 @@ import com.musicwebbe.model.Account;
 import com.musicwebbe.model.Playlist;
 import com.musicwebbe.repository.IAccountRepository;
 import com.musicwebbe.repository.IPlaylistRepository;
+import com.musicwebbe.repository.IPlaylistSongRepository;
 import com.musicwebbe.service.IPlaylistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,8 @@ public class PlaylistService implements IPlaylistService {
     private IPlaylistRepository iPlaylistRepository;
     @Autowired
     private IAccountRepository iAccountRepository;
+    @Autowired
+    private IPlaylistSongRepository iPlaylistSongRepository;
     @Override
     public Playlist save(Playlist playlist) {
         return null;
@@ -28,7 +31,8 @@ public class PlaylistService implements IPlaylistService {
 
     @Override
     public void delete(int id) {
-
+        iPlaylistSongRepository.deleteByPlaylistId(id);
+        iPlaylistRepository.deleteById(id);
     }
 
     @Override

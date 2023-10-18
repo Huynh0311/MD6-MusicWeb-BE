@@ -3,6 +3,7 @@ package com.musicwebbe.repository;
 import com.musicwebbe.model.Playlist;
 import com.musicwebbe.model.PlaylistSong;
 import com.musicwebbe.model.Song;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,4 +19,6 @@ public interface IPlaylistSongRepository extends JpaRepository<PlaylistSong,Inte
             " FROM playlist_song" +
             " WHERE playlist_id = :id")
     List<Integer> findAllByPlaylist(@Param("id") int id);
+    @Transient
+    void deleteByPlaylistId(int playlistId);
 }

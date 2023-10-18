@@ -32,6 +32,11 @@ public class PlaylistController {
     public ResponseEntity<Integer> countSong(@PathVariable int id){
         return new ResponseEntity<>(playlistSongService.countSong(id), HttpStatus.OK);
     }
+    @DeleteMapping("/deletePlaylist/{id}")
+    public ResponseEntity<?> deletePlaylist(@PathVariable int id){
+        playlistService.delete(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
     @GetMapping("/getSongByPlaylist/{id}")
     public ResponseEntity<List<Song>> getSongByPlaylist(@PathVariable int id){
         return new ResponseEntity<>(playlistSongService.findAllByPlaylist(id), HttpStatus.OK);

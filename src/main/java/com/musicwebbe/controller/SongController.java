@@ -53,7 +53,7 @@ public class SongController {
         }
     }
 
-    @PostMapping
+    @PostMapping("/add")
     public ResponseEntity<?> addSong(@RequestBody Song song) {
         Account account = getCurrentAccount();
         if (account == null) {
