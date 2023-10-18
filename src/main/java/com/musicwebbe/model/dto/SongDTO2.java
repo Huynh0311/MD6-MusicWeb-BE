@@ -26,7 +26,7 @@ public class SongDTO2 {
     private String pathSong;
     private int likeQuantity;
     private String nameSinger;
-
+    private List<CommentDTO> comments;
 
     public SongDTO2(Song song, int likeQuantity) {
         this.id = song.getId();
