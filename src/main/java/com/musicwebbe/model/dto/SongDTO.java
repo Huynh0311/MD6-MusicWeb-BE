@@ -26,7 +26,8 @@ public class SongDTO {
     private boolean isAuth;
     private String playlistImg;
     private String playlistName;
-    public SongDTO (int id,String nameSong,String imgSong,String pathSong,int accountID,String playlistImg, String playlistName) {
+    private int isLiked;
+    public SongDTO (int id,String nameSong,String imgSong,String pathSong,int accountID,String playlistImg, String playlistName,int isLiked) {
         this.id = id;
         this.nameSong=nameSong;
         this.imgSong=imgSong;
@@ -34,12 +35,14 @@ public class SongDTO {
         this.pathSong = pathSong;
         this.playlistImg = playlistImg;
         this.playlistName=playlistName;
+        this.isLiked = isLiked;
     }
-    public SongDTO (int id,String nameSong,String imgSong,String pathSong,int accountID) {
+    public SongDTO (int id,String nameSong,String imgSong,String pathSong,int accountID,int isLiked) {
         this.id = id;
         this.nameSong=nameSong;
         this.imgSong=imgSong;
         this.accountID=accountID;
         this.pathSong = pathSong;
+        this.isLiked = isLiked;
     }
 }

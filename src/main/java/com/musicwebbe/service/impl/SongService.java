@@ -49,6 +49,15 @@ public class SongService implements ISongService {
     @Autowired
     IPlaylistRepository iPlaylistRepository;
 
+    @Autowired
+    IPlaylistSongRepository iPlaylistSongRepository;
+
+    @Autowired
+    ICommentRepository iCommentRepository;
+
+    @Autowired
+    ILikesRepository iLikesRepository;
+
 
     @Override
     public Song save(Song song) {
@@ -84,8 +93,10 @@ public class SongService implements ISongService {
     @Override
     public void deleteaSong(int id) {
         likesRepository.deleteAllBySong(iSongRepository.findById(id).get());
+        iCommentRepository.deleteBySongId(id);
+        iPlaylistSongRepository.deleteBySongId(id);
+        iSingerSongRepository.deleteBySongId(id);
         iSongRepository.deleteById(id);
-
     }
 
     @Override
@@ -116,7 +127,7 @@ public class SongService implements ISongService {
 
     @Override
     public SongDTO2 getaSong(int id) {
-        Optional<Song>songOptional = iSongRepository.findById(id);
+        Optional<Song> songOptional = iSongRepository.findById(id);
         Song song = songOptional.get();
         int likeQuantity = likesRepository.getLikeQuantity(id);
         return new SongDTO2(song, likeQuantity);
@@ -124,9 +135,7 @@ public class SongService implements ISongService {
 
     @Override
     public SongDTO2 editaSong(SongDTO2 songDTO2) {
-
         Song existingSong = iSongRepository.findById(songDTO2.getId()).get();
-
         existingSong.setId(songDTO2.getId());
         existingSong.setNameSong(songDTO2.getNameSong());
         existingSong.setImgSong(songDTO2.getImgSong());
@@ -183,24 +192,57 @@ public class SongService implements ISongService {
     }
 
     @Override
-    public List<Song> findListSongByName(String name) {
-        return iSongRepository.findListSongByName(name);
+    public List<SongDTO> findListSongByName(String name, Account account) {
+        List<Song> songList = iSongRepository.findListSongByName(name);
+        return songList.stream()
+                .map(song -> {
+                    int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    return new SongDTO(
+                            song.getId(),
+                            song.getNameSong(),
+                            song.getImgSong(),
+                            song.getPathSong(),
+                            song.getAccount().getId(),
+                            isLiked
+                    );
+                }).collect(Collectors.toList());
     }
 
     @Override
-    public List<Song> findListSongByNameSinger(String name) {
+    public List<SongDTO> findListSongByNameSinger(String name,Account account) {
         List<Song> songList = iSongRepository.findListSongByNameSinger(name);
-         return songList;
+        return songList.stream().map(song -> {
+            int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+            return new SongDTO(
+                    song.getId(),
+                    song.getNameSong(),
+                    song.getImgSong(),
+                    song.getPathSong(),
+                    song.getAccount().getId(),
+                    isLiked
+            );
+        }).collect(Collectors.toList());
     }
 
     @Override
-    public List<List<SongDTO>> findListSongByPlaylist(String name) {
+    public List<List<SongDTO>> findListSongByPlaylist(String name, Account account) {
         List<Playlist> playlist = iPlaylistRepository.findAllPlaylistByNamePlaylist(name);
-        List<List<SongDTO>>parentList = new ArrayList<>();
-        for(Playlist playlist1 : playlist) {
-            List<Song> songList = iSongRepository.findListSongByPlaylistName(playlist1.getNamePlaylist(),playlist1.getId());
+        List<List<SongDTO>> parentList = new ArrayList<>();
+        for (Playlist playlist1 : playlist) {
+            List<Song> songList = iSongRepository.findListSongByPlaylistName(playlist1.getNamePlaylist(), playlist1.getId());
             List<SongDTO> songDTOList;
-            songDTOList = songList.stream().map(song -> new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getAccount().getId(),playlist1.getPlaylistImg(),playlist1.getNamePlaylist())).collect(Collectors.toList());
+            songDTOList = songList.stream()
+                    .map(song -> {
+                        int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                        return new SongDTO(
+                                song.getId(),
+                                song.getNameSong(),
+                                song.getImgSong(), song.getPathSong(),
+                                song.getAccount().getId(),
+                                playlist1.getPlaylistImg(),
+                                playlist1.getNamePlaylist(), isLiked
+                        );
+                    }).collect(Collectors.toList());
             parentList.add(songDTOList);
         }
         return parentList;
