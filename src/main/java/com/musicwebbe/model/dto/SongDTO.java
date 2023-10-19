@@ -45,4 +45,23 @@ public class SongDTO {
         this.pathSong = pathSong;
         this.isLiked = isLiked;
     }
+
+    public SongDTO(Integer id, String nameSong, String imgSong, String pathSong,String nameSinger) {
+        this.id = id;
+        this.nameSong=nameSong;
+        this.imgSong=imgSong;
+        this.pathSong = pathSong;
+        this.NameSinger=nameSinger;
+    }
+
+    public SongDTO (int id,String nameSong,String imgSong,String pathSong,int accountID,String description,int isLiked) {
+        this.id = id;
+        this.nameSong=nameSong;
+        this.imgSong=imgSong;
+        this.accountID=accountID;
+        this.pathSong = pathSong;
+        this.description = description;
+        this.isLiked = isLiked;
+    }
+
 }
