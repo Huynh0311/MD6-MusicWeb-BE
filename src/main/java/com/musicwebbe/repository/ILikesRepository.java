@@ -26,5 +26,4 @@ public interface ILikesRepository extends JpaRepository<Likes,Integer> {
     @Query(nativeQuery = true,value = "delete from likes where likes.song_id=:idSong and likes.account_id=:idAccount")
     @Modifying
     void removeLikeBySongIDAndAccountID(@Param("idSong")int idSong,@Param("idAccount")int idAccount);
-
 }

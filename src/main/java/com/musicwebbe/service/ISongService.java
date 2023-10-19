@@ -32,4 +32,5 @@ public interface ISongService extends IService<Song> {
 
     List<Song> findListSongByNameSinger(String name);
     List<List<SongDTO>> findListSongByPlaylist(String name);
+    int getAccountBySong(int id);
 }

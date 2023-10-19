@@ -153,4 +153,8 @@ public class SongController {
         List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name);
         return ResponseEntity.ok(songList);
     }
+    @GetMapping("/findAccountBySong/{id}")
+    public ResponseEntity<Account> findAccountBySong(@PathVariable int id) {
+        return new ResponseEntity<>(accountService.findById(iSongService.getAccountBySong(id)),HttpStatus.ACCEPTED);
+    }
 }
