@@ -3,6 +3,7 @@ package com.musicwebbe.service.impl;
 import com.musicwebbe.model.*;
 import com.musicwebbe.model.dto.CommentDTO;
 import com.musicwebbe.model.dto.SongDTO;
+import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.repository.*;
 import com.musicwebbe.model.Song;
 import com.musicwebbe.model.dto.SongDTO2;
@@ -43,6 +44,9 @@ public class SongService implements ISongService {
     IAccountRepository iAccountRepository;
 
     @Autowired
+    ILikesRepository iLikesRepository;
+
+    @Autowired
     IPlaylistRepository iPlaylistRepository;
 
     @Autowired
@@ -50,9 +54,6 @@ public class SongService implements ISongService {
 
     @Autowired
     ICommentRepository iCommentRepository;
-
-    @Autowired
-    ILikesRepository iLikesRepository;
 
 
     @Override
@@ -284,5 +285,17 @@ public class SongService implements ISongService {
         return iSongRepository.count();
     }
 
+
+    @Override
+    public List<SongFavorite> getAllFavoritesByUser(String username) {
+        List<SongFavorite> listSongFavorite = new ArrayList<>();
+        List<Likes> likesList = iLikesRepository.findAllByAccountEmail(username);
+        for (Likes likes : likesList){
+            SongFavorite songFavorite = new SongFavorite();
+            BeanUtils.copyProperties(likes.getSong(), songFavorite);
+            listSongFavorite.add(songFavorite);
+        }
+        return listSongFavorite;
+    }
 
 }

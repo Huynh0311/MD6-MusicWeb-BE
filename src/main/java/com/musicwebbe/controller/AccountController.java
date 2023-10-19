@@ -3,11 +3,16 @@ package com.musicwebbe.controller;
 import com.musicwebbe.model.Account;
 import com.musicwebbe.model.dto.AccountDTO;
 import com.musicwebbe.model.dto.AccountDTO2;
+import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.service.IAccountService;
+import com.musicwebbe.service.ISongService;
 import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,11 +24,13 @@ import java.util.List;
 public class AccountController {
 
     @Autowired
-    AccountService accountService;
+    private AccountService accountService;
     @Autowired
-    IAccountService iAccountService;
+    private IAccountService iAccountService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private ISongService iSongService;
 
     @GetMapping("/all")
     public List<Account> getAll() {
@@ -31,28 +38,28 @@ public class AccountController {
     }
 
     @PostMapping("/saveAccount/{id}")
-    public ResponseEntity<?> save(@PathVariable int id, @RequestBody Account account) {
+    public ResponseEntity<Account> save(@PathVariable int id, @RequestBody Account account) {
         Account accFindId = accountService.findById(id);
         accFindId.setName(account.getName());
         accFindId.setEmail(account.getEmail());
         accFindId.setPhone(account.getPhone());
         accFindId.setImg(account.getImg());
-        boolean check = accountService.save(accFindId);
-        if (check) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        Account accountSave = accountService.save(accFindId);
+        try {
+            return new ResponseEntity<>(accountSave, HttpStatus.OK);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> savePassword(@RequestBody Account account) {
+    public ResponseEntity<Account> savePassword(@RequestBody Account account) {
         String password = passwordEncoder.encode(account.getPassword());
         account.setPassword(password);
-        boolean check = accountService.save(account);
-        if (check) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        Account accountSave = accountService.save(account);
+        try {
+            return new ResponseEntity<>(accountSave, HttpStatus.OK);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -66,5 +73,16 @@ public class AccountController {
     public List<AccountDTO2> findAccountByAut() {
         List<AccountDTO2> accountList = iAccountService.getAllByIsAuth();
         return accountList;
+    }
+
+    @GetMapping("/favorites")
+    public ResponseEntity<List<SongFavorite>> songFavorite() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        List<SongFavorite> songs = iSongService.getAllFavoritesByUser(userDetails.getUsername());
+        if (songs.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(songs, HttpStatus.OK);
     }
 }

@@ -4,9 +4,7 @@ import com.musicwebbe.model.Account;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.model.Song;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.musicwebbe.model.dto.SongFavorite;
 
 import java.util.List;
 
@@ -14,6 +12,7 @@ import java.util.List;
 public interface ISongService extends IService<Song> {
 
     List<Song> getAll();
+
     List<SongDTO> findTop5ByPlaysDesc(Account account);
 
     void delete(int id);
@@ -25,10 +24,11 @@ public interface ISongService extends IService<Song> {
     SongDTO2 editaSong(SongDTO2 songDTO2);
 
     void deleteaSong(int id);
-    Song addSong(Account account, Song song);
-    public SongDTO findSongById(int id);
 
-    public List<SongDTO> getAllSongByGenresID(Song song);
+    Song addSong(Account account, Song song);
+    SongDTO findSongById(int id);
+
+    List<SongDTO> getAllSongByGenresID(Song song);
 
     List<SongDTO> findListSongByName(String name,Account account);
 
@@ -37,4 +37,5 @@ public interface ISongService extends IService<Song> {
 
     public List<Song> getAllSongByAccountId(int id);
     long getTotalSongs();
+    List<SongFavorite> getAllFavoritesByUser(String username);
 }

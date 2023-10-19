@@ -63,9 +63,8 @@ public class AccountService implements UserDetailsService, IAccountService {
         iAccountRepository.save(account);
     }
 
-    public boolean save(Account account) {
-        iAccountRepository.save(account);
-        return true;
+    public Account save(Account account) {
+        return iAccountRepository.save(account);
     }
 
     public UserDetails loadUserByUsername(String email) {
