@@ -80,12 +80,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/apiAccount/**").permitAll()
                 .antMatchers("/genres").permitAll()
                 .antMatchers("/songs/**").permitAll()
-                .antMatchers("/comments/getAll/**").permitAll()
+                .antMatchers("/comments/**").permitAll()
                 .antMatchers("/songs/getByGenresID/**").permitAll()
+                .antMatchers("/playlist/**").permitAll()
                 .antMatchers("/apiAccount/auth/**").permitAll()
                 // add test -----------
                 .antMatchers(HttpMethod.GET, "/songs/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/songs/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/admin/**").permitAll()
                 // add test ----------
                 .antMatchers("/songs/**").permitAll() //Test
                 .antMatchers("/likes/**").permitAll() //Test

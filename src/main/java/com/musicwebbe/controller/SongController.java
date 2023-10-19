@@ -107,8 +107,9 @@ public class SongController {
     }
 
     @GetMapping("/top5ByPlays")
-    public List<Song> getTop5SongsByPlays() {
-        List<Song> top5Songs = iSongService.findTop5ByPlaysDesc();
+    public List<SongDTO> getTop5SongsByPlays() {
+        Account account = getCurrentAccount();
+        List<SongDTO> top5Songs = iSongService.findTop5ByPlaysDesc(account);
         if (top5Songs.size() > 5) {
             top5Songs = top5Songs.subList(0, 5);
         }
@@ -160,5 +161,11 @@ public class SongController {
         Account account = getCurrentAccount();
         List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name,account);
         return ResponseEntity.ok(songList);
+    }
+
+    @GetMapping("/account")
+    public ResponseEntity<List<Song>> getAllSongByAccountId() {
+        List<Song> song = iSongService.getAllSongByAccountId(getCurrentAccount().getId());
+        return ResponseEntity.ok(song);
     }
 }

@@ -13,7 +13,7 @@ public interface ISongService extends IService<Song> {
 
     List<Song> getAll();
 
-    List<Song> findTop5ByPlaysDesc();
+    List<SongDTO> findTop5ByPlaysDesc(Account account);
 
     void delete(int id);
 
@@ -34,5 +34,8 @@ public interface ISongService extends IService<Song> {
 
     List<SongDTO> findListSongByNameSinger(String name,Account account);
     List<List<SongDTO>> findListSongByPlaylist(String name,Account account);
+
+    public List<Song> getAllSongByAccountId(int id);
+    long getTotalSongs();
     List<SongFavorite> getAllFavoritesByUser(String username);
 }

@@ -5,6 +5,8 @@ import com.musicwebbe.exeption.EmailExitsException;
 import com.musicwebbe.model.Account;
 import com.musicwebbe.model.AccountPrinciple;
 import com.musicwebbe.model.Role;
+import com.musicwebbe.model.dto.AccountDTO;
+import com.musicwebbe.model.dto.AccountDTO2;
 import com.musicwebbe.repository.IAccountRepository;
 import com.musicwebbe.repository.IRoleRepository;
 import com.musicwebbe.request.RegisterRequest;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountService implements UserDetailsService, IAccountService {
@@ -35,11 +38,12 @@ public class AccountService implements UserDetailsService, IAccountService {
     public Account findByEmail(String email) {
         return iAccountRepository.findAllByEmail(email);
     }
+
     public Optional<Account> findAccountByEmail(String email) {
         return iAccountRepository.findAccountByEmail(email);
     }
 
-    public void add(RegisterRequest registerRequest) throws Exception{
+    public void add(RegisterRequest registerRequest) throws Exception {
 
         if (iAccountRepository.existsByEmail(registerRequest.getEmail())) {
             throw new EmailExitsException("Email đã tồn tại");
@@ -81,5 +85,22 @@ public class AccountService implements UserDetailsService, IAccountService {
     @Override
     public Account findById(int id) {
         return iAccountRepository.findById(id).get();
+    }
+
+    @Override
+    public List<AccountDTO2> getAllByIsAuth() {
+        List<Account> accountList = iAccountRepository.getAllByIsAuthOrderByIdDesc(true);
+        List<AccountDTO2> accountDTO2List = accountList.stream()
+                .map(account -> {
+                    return new AccountDTO2(account.getId(),
+                            account.getName(),
+                            account.getImg());
+                }).collect(Collectors.toList());
+        return accountDTO2List;
+    }
+
+    @Override
+    public Integer getAccountQuantity() {
+        return iAccountRepository.countAccountByRoleId(1);
     }
 }
