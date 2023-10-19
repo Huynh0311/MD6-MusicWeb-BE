@@ -10,4 +10,6 @@ public interface ISingerService extends IService<Singer> {
     List<Singer> findListSingerBySongID(int id);
 
     Singer findSingerByAccountID(int id);
+
+    List<Singer> getSingerQuantity();
 }

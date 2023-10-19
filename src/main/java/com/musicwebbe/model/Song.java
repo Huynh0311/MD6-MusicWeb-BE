@@ -1,5 +1,6 @@
 package com.musicwebbe.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Song {
     @ManyToOne
     private Account account;
     @OneToMany(mappedBy = "song")
+    @JsonIgnore
     private List<Comment> comments;
 
 }

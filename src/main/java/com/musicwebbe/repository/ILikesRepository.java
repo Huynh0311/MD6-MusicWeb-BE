@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import javax.transaction.Transactional;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Transactional
@@ -26,5 +27,4 @@ public interface ILikesRepository extends JpaRepository<Likes,Integer> {
     @Query(nativeQuery = true,value = "delete from likes where likes.song_id=:idSong and likes.account_id=:idAccount")
     @Modifying
     void removeLikeBySongIDAndAccountID(@Param("idSong")int idSong,@Param("idAccount")int idAccount);
-
 }
