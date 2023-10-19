@@ -262,4 +262,14 @@ public class SongService implements ISongService {
         }
         return parentList;
     }
+    public List<Song> getAllSongByAccountId(int id) {
+        return iSongRepository.getAllByAccount_Id(id);
+    }
+
+    @Override
+    public long getTotalSongs() {
+        return iSongRepository.count();
+    }
+
+
 }

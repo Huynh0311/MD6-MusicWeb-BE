@@ -83,4 +83,9 @@ public class AccountService implements UserDetailsService, IAccountService {
     public Account findById(int id) {
         return iAccountRepository.findById(id).get();
     }
+
+    @Override
+    public Integer getAccountQuantity() {
+        return iAccountRepository.countAccountByRoleId(1);
+    }
 }

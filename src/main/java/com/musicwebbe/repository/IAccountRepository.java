@@ -12,5 +12,5 @@ public interface IAccountRepository extends JpaRepository<Account,Integer> {
 
     Optional<Account> findAccountByEmail(String email);
 
-
+    Integer countAccountByRoleId(int id);
 }
