@@ -4,7 +4,6 @@ import com.musicwebbe.model.*;
 import com.musicwebbe.model.dto.CommentDTO;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.repository.*;
-
 import com.musicwebbe.model.Song;
 import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.repository.ISongRepository;
@@ -13,11 +12,7 @@ import com.musicwebbe.service.ISingerSongService;
 import com.musicwebbe.service.ISongService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -79,7 +74,12 @@ public class SongService implements ISongService {
 
     @Override
     public Song findById(int id) {
-        return iSongRepository.findById(id).get();
+        Optional<Song> optionalSong = iSongRepository.findById(id);
+        if (optionalSong.isPresent()) {
+            return optionalSong.get();
+        } else {
+            return null;
+        }
     }
 
     @Override
@@ -87,9 +87,21 @@ public class SongService implements ISongService {
         return iSongRepository.findAll();
     }
 
+//    @Override
+//    public List<Song> findTop5ByPlaysDesc() {
+//        return iSongRepository.findTop5ByPlaysDesc();
+//    }
+
     @Override
-    public List<Song> findTop5ByPlaysDesc() {
-        return iSongRepository.findTop5ByPlaysDesc();
+    public List<SongDTO> findTop5ByPlaysDesc(Account account) {
+        List<Song>songList = iSongRepository.findTop5ByPlaysDesc();
+        List<SongDTO> songDTOList = songList.stream()
+                .map(song -> {
+                    int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    return new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),account.getId(),song.getDescription(),isLiked);
+                }).collect(Collectors.toList());
+
+        return songDTOList;
     }
 
     @Override
@@ -149,9 +161,7 @@ public class SongService implements ISongService {
 
     @Override
     public SongDTO2 editaSong(SongDTO2 songDTO2) {
-
         Song existingSong = iSongRepository.findById(songDTO2.getId()).get();
-
         existingSong.setId(songDTO2.getId());
         existingSong.setNameSong(songDTO2.getNameSong());
         existingSong.setImgSong(songDTO2.getImgSong());
@@ -183,27 +193,29 @@ public class SongService implements ISongService {
     }
 
     public SongDTO findSongById(int id) {
-        Song song = iSongRepository.findSongByIDHQL(id);
-        SongDTO songDTO = new SongDTO();
-        BeanUtils.copyProperties(song, songDTO);
-        Account account = iAccountRepository.findById(song.getAccount().getId()).get();
-        songDTO.setAccountName(account.getName());
-        songDTO.setAccountID(account.getId());
-        songDTO.setAuth(account.isAuth());
-        return songDTO;
+        Optional<Song> optionalSong = iSongRepository.findById(id);
+        if (optionalSong.isPresent()) {
+            Song song = optionalSong.get();
+            SongDTO songDTO = new SongDTO();
+            BeanUtils.copyProperties(song, songDTO);
+            Account account = iAccountRepository.findById(song.getAccount().getId()).get();
+            songDTO.setAccountName(account.getName());
+            songDTO.setAccountID(account.getId());
+            songDTO.setAuth(account.isAuth());
+            return songDTO;
+        } else {
+            return null;
+        }
     }
 
     @Override
     public List<SongDTO> getAllSongByGenresID(Song song) {
         int songGenresID = song.getGenres().getId();
-        List<Song> songList;
-        songList = iSongRepository.findAllSongByGenresID(songGenresID);
-        List<SongDTO> songDTOList = new ArrayList<>();
-        for (Song aSong : songList) {
-            SongDTO songDTO = new SongDTO();
-            BeanUtils.copyProperties(aSong, songDTO);
-            songDTOList.add(songDTO);
-        }
+        List<Song> songList = iSongRepository.findAllSongByGenresID(songGenresID);
+        List<SongDTO> songDTOList = songList.stream()
+                .map(aSong -> {
+                    return new SongDTO(aSong.getId(), aSong.getNameSong(), aSong.getImgSong(), aSong.getPathSong(), aSong.getNameSinger());
+                }).collect(Collectors.toList());
         return songDTOList;
     }
 
@@ -225,7 +237,7 @@ public class SongService implements ISongService {
     }
 
     @Override
-    public List<SongDTO> findListSongByNameSinger(String name,Account account) {
+    public List<SongDTO> findListSongByNameSinger(String name, Account account) {
         List<Song> songList = iSongRepository.findListSongByNameSinger(name);
         return songList.stream().map(song -> {
             int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());

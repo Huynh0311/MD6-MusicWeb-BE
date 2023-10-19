@@ -14,4 +14,10 @@ public class AccountDTO2 {
     private String email;
     private String img;
     private Role role;
+
+    public AccountDTO2(int id,String name,String img){
+        this.id=id;
+        this.name=name;
+        this.img=img;
+    }
 }
