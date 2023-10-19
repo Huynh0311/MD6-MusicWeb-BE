@@ -12,7 +12,7 @@ public class Account {
     private Integer id;
     @Column(length = 50)
     private String name;
-    @Column(length = 50)
+    @Column(length = 255)
     private String password;
     @Column(length = 10)
     private String phone;
