@@ -14,4 +14,6 @@ public interface IAccountRepository extends JpaRepository<Account,Integer> {
     Optional<Account> findAccountByEmail(String email);
 
     List<Account> getAllByIsAuthOrderByIdDesc(boolean isAuth);
+
+    Integer countAccountByRoleId(int id);
 }

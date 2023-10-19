@@ -160,4 +160,10 @@ public class SongController {
         List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name,account);
         return ResponseEntity.ok(songList);
     }
+
+    @GetMapping("/account")
+    public ResponseEntity<List<Song>> getAllSongByAccountId() {
+        List<Song> song = iSongService.getAllSongByAccountId(getCurrentAccount().getId());
+        return ResponseEntity.ok(song);
+    }
 }

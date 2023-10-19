@@ -27,4 +27,7 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
     List<Song> findListSongByPlaylistName(@Param("name")String name,@Param("id")int id);
     void deleteById(int id);
 
+    List<Song> getAllByAccount_Id(int id);
+
+
 }

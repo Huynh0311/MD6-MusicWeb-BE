@@ -99,4 +99,9 @@ public class AccountService implements UserDetailsService, IAccountService {
                 }).collect(Collectors.toList());
         return accountDTO2List;
     }
+
+    @Override
+    public Integer getAccountQuantity() {
+        return iAccountRepository.countAccountByRoleId(1);
+    }
 }
