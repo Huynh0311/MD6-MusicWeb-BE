@@ -41,19 +41,26 @@ public class SongController {
     ISingerSongService iSingerSongService;
 
     public Account getCurrentAccount() {
-        String email = "";
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication.isAuthenticated()) {
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            email = userDetails.getUsername();
+        try {
+            String email = "";
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication.isAuthenticated()) {
+                UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+                email = userDetails.getUsername();
+            }
+            return accountService.findByEmail(email);
+
+        } catch (Exception e) {
+            return null;
         }
-        Account account = accountService.findByEmail(email);
-        return account;
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Song> addSong(@RequestBody Song song) {
+    public ResponseEntity<?> addSong(@RequestBody Song song) {
         Account account = getCurrentAccount();
+        if (account == null) {
+            return new ResponseEntity<>("Vui lòng đăng nhập", HttpStatus.UNAUTHORIZED);
+        }
         Song savedSong = iSongService.addSong(account, song);
         return new ResponseEntity<>(savedSong, HttpStatus.OK);
     }
@@ -62,26 +69,29 @@ public class SongController {
     public ResponseEntity<SongDTO> findSongByID(@PathVariable int id) {
         SongDTO songDTO = iSongService.findSongById(id);
         if (songDTO == null) {
-            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(songDTO, HttpStatus.OK);
     }
 
     @PostMapping("/play/{id}")
-    public int playSong(@PathVariable int id) {
+    public ResponseEntity<Integer> playSong(@PathVariable int id) {
         Song song = iSongService.findById(id);
+        if(song==null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         int playCount = song.getPlays();
         playCount++;
         song.setPlays(playCount);
         iSongService.edit(song);
-        return playCount;
+        return new ResponseEntity<>(playCount,HttpStatus.OK);
     }
 
     @GetMapping("/getByGenresID/{id}")
     public ResponseEntity<List<SongDTO>> findAllSongByGenresID(@PathVariable int id) {
         Song song = iSongService.findById(id);
         if (song == null) {
-            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         List<SongDTO> listSongDTO = iSongService.getAllSongByGenresID(song);
         return new ResponseEntity<>(listSongDTO, HttpStatus.OK);
@@ -132,20 +142,23 @@ public class SongController {
     }
 
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<List<Song>> findListSongByName(@PathVariable String name) {
-        List<Song> songList = iSongService.findListSongByName(name);
+    public ResponseEntity<List<SongDTO>> findListSongByName(@PathVariable String name) {
+        Account account = getCurrentAccount();
+        List<SongDTO> songList = iSongService.findListSongByName(name,account);
         return ResponseEntity.ok(songList);
     }
 
     @GetMapping("/findBySingerName/{name}")
-    public ResponseEntity<List<Song>> findListSongByNameSinger(@PathVariable String name) {
-        List<Song> songList = iSongService.findListSongByNameSinger(name);
+    public ResponseEntity<List<SongDTO>> findListSongByNameSinger(@PathVariable String name) {
+        Account account = getCurrentAccount();
+        List<SongDTO> songList = iSongService.findListSongByNameSinger(name,account);
         return ResponseEntity.ok(songList);
     }
 
     @GetMapping("/findByPlaylist/{name}")
     public ResponseEntity<List<List<SongDTO>>> findListSongByPlaylist(@PathVariable String name) {
-        List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name);
+        Account account = getCurrentAccount();
+        List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name,account);
         return ResponseEntity.ok(songList);
     }
 }

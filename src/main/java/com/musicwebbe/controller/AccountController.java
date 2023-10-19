@@ -36,28 +36,28 @@ public class AccountController {
     }
 
     @PostMapping("/saveAccount/{id}")
-    public ResponseEntity<?> save(@PathVariable int id, @RequestBody Account account) {
+    public ResponseEntity<Account> save(@PathVariable int id, @RequestBody Account account) {
         Account accFindId = accountService.findById(id);
         accFindId.setName(account.getName());
         accFindId.setEmail(account.getEmail());
         accFindId.setPhone(account.getPhone());
         accFindId.setImg(account.getImg());
-        boolean check = accountService.save(accFindId);
-        if (check) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        Account accountSave = accountService.save(accFindId);
+        try {
+            return new ResponseEntity<>(accountSave, HttpStatus.OK);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> savePassword(@RequestBody Account account) {
+    public ResponseEntity<Account> savePassword(@RequestBody Account account) {
         String password = passwordEncoder.encode(account.getPassword());
         account.setPassword(password);
-        boolean check = accountService.save(account);
-        if (check) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
+        Account accountSave = accountService.save(account);
+        try {
+            return new ResponseEntity<>(accountSave, HttpStatus.OK);
+        } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }

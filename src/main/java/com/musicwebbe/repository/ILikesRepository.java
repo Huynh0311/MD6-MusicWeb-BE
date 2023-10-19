@@ -2,17 +2,13 @@ package com.musicwebbe.repository;
 
 import com.musicwebbe.model.Likes;
 import com.musicwebbe.model.Song;
-import com.musicwebbe.model.dto.SongDTO2;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
-
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 public interface ILikesRepository extends JpaRepository<Likes,Integer> {

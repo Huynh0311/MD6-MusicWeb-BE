@@ -1,5 +1,6 @@
 package com.musicwebbe.service;
 
+import com.musicwebbe.model.Account;
 import com.musicwebbe.model.Likes;
 import com.musicwebbe.model.Song;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +16,5 @@ public interface ILikesService extends IService<Likes> {
 
     Integer likeChecking(int idAccount,int idSong);
 
-    Integer setLiked(int idAccount,int idSong,Likes likes);
-
+    public Integer setLiked(Account account, int idSong);
 }
