@@ -1,9 +1,11 @@
 package com.musicwebbe.controller;
 
+import com.musicwebbe.exeption.EmailExitsException;
 import com.musicwebbe.model.*;
 import com.musicwebbe.model.dto.AccountDTO;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.model.dto.SongDTO2;
+import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.service.ISingerService;
 import com.musicwebbe.service.ISingerSongService;
 import com.musicwebbe.service.ISongService;
@@ -105,8 +107,9 @@ public class SongController {
     }
 
     @GetMapping("/top5ByPlays")
-    public List<Song> getTop5SongsByPlays() {
-        List<Song> top5Songs = iSongService.findTop5ByPlaysDesc();
+    public List<SongDTO> getTop5SongsByPlays() {
+        Account account = getCurrentAccount();
+        List<SongDTO> top5Songs = iSongService.findTop5ByPlaysDesc(account);
         if (top5Songs.size() > 5) {
             top5Songs = top5Songs.subList(0, 5);
         }

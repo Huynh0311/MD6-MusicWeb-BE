@@ -14,7 +14,7 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
 
     @Query(nativeQuery = true,value = "select s.* from song s where s.genres_id=:id")
     List<Song> findAllSongByGenresID(@Param("id")int id);
-    @Query("SELECT s FROM Song s ORDER BY s.plays DESC")
+    @Query(value = "SELECT s FROM Song s ORDER BY s.plays DESC ")
     List<Song> findTop5ByPlaysDesc();
 
     @Query(nativeQuery = true,value="select s.* from song s inner join account a on s.account_id = a.id where s.name_song like %:name% order by  case when a.is_auth = true then 0 else 1 end;")
@@ -28,6 +28,5 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
     void deleteById(int id);
 
     List<Song> getAllByAccount_Id(int id);
-
 
 }
