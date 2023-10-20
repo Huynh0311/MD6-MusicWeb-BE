@@ -6,10 +6,8 @@ import com.musicwebbe.service.ISingerService;
 import com.musicwebbe.service.ISongService;
 import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,4 +35,10 @@ public class AdminController {
 
     @GetMapping("singerquantity")
     public List<Singer> getAllSinger() { return iSingerService.getSingerQuantity(); }
+
+    @PutMapping("/auth/{id}")
+    public ResponseEntity<Integer> setAuth(@PathVariable Integer id){
+        Integer isSetAuth = iAccountService.setAuth(id);
+        return ResponseEntity.ok(isSetAuth);
+    }
 }
