@@ -9,4 +9,6 @@ public interface IAccountService {
     Account findById(int id);
 
     Integer getAccountQuantity();
+
+    Integer setAuth(Integer id);
 }
