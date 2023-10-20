@@ -49,4 +49,9 @@ public class PlaylistService implements IPlaylistService {
     public Account getAccount(int id) {
         return iAccountRepository.findById(iPlaylistRepository.getAccount(id)).get();
     }
+
+    @Override
+    public List<Playlist> findByIdAccount(int idAccount) {
+        return iPlaylistRepository.findAllByAccount_Id(idAccount);
+    }
 }

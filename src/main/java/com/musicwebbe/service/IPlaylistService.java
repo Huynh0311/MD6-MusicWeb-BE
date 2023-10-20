@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface IPlaylistService extends IService<Playlist>{
     Account getAccount(int id);
-
+    List<Playlist> findByIdAccount(int idAccount);
 }
