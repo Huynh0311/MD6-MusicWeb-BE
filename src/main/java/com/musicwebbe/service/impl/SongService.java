@@ -98,10 +98,15 @@ public class SongService implements ISongService {
         List<Song>songList = iSongRepository.findTop5ByPlaysDesc();
         List<SongDTO> songDTOList = songList.stream()
                 .map(song -> {
-                    int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
-                    return new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),account.getId(),song.getDescription(),isLiked);
+                    Integer isLiked;
+                    if(account==null) {
+                        isLiked = 0;
+                        return new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getDescription(),isLiked);
+                    }else {
+                        isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                        return new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getDescription(),isLiked);
+                    }
                 }).collect(Collectors.toList());
-
         return songDTOList;
     }
 

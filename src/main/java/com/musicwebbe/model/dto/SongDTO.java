@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,39 +27,50 @@ public class SongDTO {
     private boolean isAuth;
     private String playlistImg;
     private String playlistName;
-    private int isLiked;
-    public SongDTO (int id,String nameSong,String imgSong,String pathSong,int accountID,String playlistImg, String playlistName,int isLiked) {
+    private Integer isLiked;
+
+    public SongDTO(int id, String nameSong, String imgSong, String pathSong, int accountID, String playlistImg, String playlistName, int isLiked) {
         this.id = id;
-        this.nameSong=nameSong;
-        this.imgSong=imgSong;
-        this.accountID=accountID;
+        this.nameSong = nameSong;
+        this.imgSong = imgSong;
+        this.accountID = accountID;
         this.pathSong = pathSong;
         this.playlistImg = playlistImg;
-        this.playlistName=playlistName;
+        this.playlistName = playlistName;
         this.isLiked = isLiked;
     }
-    public SongDTO (int id,String nameSong,String imgSong,String pathSong,int accountID,int isLiked) {
+
+    public SongDTO(int id, String nameSong, String imgSong, String pathSong, int accountID, int isLiked) {
         this.id = id;
-        this.nameSong=nameSong;
-        this.imgSong=imgSong;
-        this.accountID=accountID;
+        this.nameSong = nameSong;
+        this.imgSong = imgSong;
+        this.accountID = accountID;
         this.pathSong = pathSong;
         this.isLiked = isLiked;
     }
 
-    public SongDTO(Integer id, String nameSong, String imgSong, String pathSong,String nameSinger) {
+    public SongDTO(int id, String nameSong, String imgSong, String pathSong, String description, int isLiked) {
         this.id = id;
-        this.nameSong=nameSong;
-        this.imgSong=imgSong;
+        this.nameSong = nameSong;
+        this.imgSong = imgSong;
         this.pathSong = pathSong;
-        this.NameSinger=nameSinger;
+        this.isLiked = isLiked;
+        this.description = description;
     }
 
-    public SongDTO (int id,String nameSong,String imgSong,String pathSong,int accountID,String description,int isLiked) {
+    public SongDTO(Integer id, String nameSong, String imgSong, String pathSong, String nameSinger) {
         this.id = id;
-        this.nameSong=nameSong;
-        this.imgSong=imgSong;
-        this.accountID=accountID;
+        this.nameSong = nameSong;
+        this.imgSong = imgSong;
+        this.pathSong = pathSong;
+        this.NameSinger = nameSinger;
+    }
+
+    public SongDTO(int id, String nameSong, String imgSong, String pathSong, int accountID, String description, Integer isLiked) {
+        this.id = id;
+        this.nameSong = nameSong;
+        this.imgSong = imgSong;
+        this.accountID = accountID;
         this.pathSong = pathSong;
         this.description = description;
         this.isLiked = isLiked;
