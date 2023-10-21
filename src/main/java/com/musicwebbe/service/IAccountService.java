@@ -14,4 +14,6 @@ public interface IAccountService {
     List<AccountDTO2> getAllByIsAuth();
 
     Integer getAccountQuantity();
+
+    Integer setAuth(Integer id);
 }

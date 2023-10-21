@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 import java.util.Objects;
@@ -102,5 +103,10 @@ public class AccountService implements UserDetailsService, IAccountService {
     @Override
     public Integer getAccountQuantity() {
         return iAccountRepository.countAccountByRoleId(1);
+    }
+
+    @Override
+    public Integer setAuth(@PathVariable Integer id) {
+        return iAccountRepository.setAuth(id);
     }
 }
