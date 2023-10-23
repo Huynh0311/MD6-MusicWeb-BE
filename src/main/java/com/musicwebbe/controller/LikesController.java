@@ -58,6 +58,7 @@ public class LikesController {
             return null;
         }
         int result = iLikesService.setLiked(account, idSong);
+
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
