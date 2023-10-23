@@ -3,6 +3,7 @@ package com.musicwebbe.controller;
 import com.musicwebbe.model.Account;
 import com.musicwebbe.model.Playlist;
 import com.musicwebbe.model.Song;
+import com.musicwebbe.model.dto.PlaylistDTO;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.service.impl.AccountService;
 import com.musicwebbe.service.impl.PlaylistService;
@@ -42,31 +43,51 @@ public class PlaylistController {
             return null;
         }
     }
+
     @GetMapping("/all")
-    public ResponseEntity<List<Playlist>> getAll(){
+    public ResponseEntity<List<Playlist>> getAll() {
         return new ResponseEntity<>(playlistService.getAll(), HttpStatus.OK);
     }
+
+//    @GetMapping("/findOne/{id}")
+//    public ResponseEntity<Playlist> findById(@PathVariable int id){
+//        return new ResponseEntity<>(playlistService.findById(id), HttpStatus.OK);
+//    }
+
     @GetMapping("/findOne/{id}")
-    public ResponseEntity<Playlist> findById(@PathVariable int id){
-        return new ResponseEntity<>(playlistService.findById(id), HttpStatus.OK);
+    public ResponseEntity<PlaylistDTO> findByIdWithLikeQuantityAndIsLike(@PathVariable int id) {
+        Account account = getCurrentAccount();
+        PlaylistDTO playlistDTO = playlistService.findByIdWithLikeQuantityAndIsLike(id, account);
+        if (playlistDTO == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(playlistDTO, HttpStatus.OK);
     }
+
     @GetMapping("/countSong/{id}")
-    public ResponseEntity<Integer> countSong(@PathVariable int id){
+    public ResponseEntity<Integer> countSong(@PathVariable int id) {
         return new ResponseEntity<>(playlistSongService.countSong(id), HttpStatus.OK);
     }
+
     @DeleteMapping("/deletePlaylist/{id}")
-    public ResponseEntity<?> deletePlaylist(@PathVariable int id){
+    public ResponseEntity<?> deletePlaylist(@PathVariable int id) {
         playlistService.delete(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
     @GetMapping("/getSongByPlaylist/{id}")
-    public ResponseEntity<List<SongDTO>> getSongByPlaylist(@PathVariable int id){
+    public ResponseEntity<List<SongDTO>> getSongByPlaylist(@PathVariable int id) {
         Account account = getCurrentAccount();
-        return new ResponseEntity<>(playlistSongService.findAllByPlaylist(id,account), HttpStatus.OK);
+        return new ResponseEntity<>(playlistSongService.findAllByPlaylist(id, account), HttpStatus.OK);
     }
+
     @GetMapping("/getUserByPlaylist/{id}")
-    public ResponseEntity<Account> getAccount(@PathVariable int id){
+    public ResponseEntity<Account> getAccount(@PathVariable int id) {
         return new ResponseEntity<>(playlistService.getAccount(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllWithLikeQuantity")
+    public ResponseEntity<List<PlaylistDTO>> getAllPlaylistWithLikesQuantity() {
+        Account account = getCurrentAccount();
+        return new ResponseEntity<>(playlistService.getAllWithLikeQuantity(account), HttpStatus.OK);
     }
 
 }
