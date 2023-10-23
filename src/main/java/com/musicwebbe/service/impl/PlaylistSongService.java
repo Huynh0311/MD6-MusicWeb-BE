@@ -30,13 +30,13 @@ public class PlaylistSongService implements IPlaylistSongService {
     @Override
     public List<SongDTO> findAllByPlaylist(int id, Account account) {
         List<SongDTO> listSong = new ArrayList<>();
-        for (int i:iPlaylistSongRepository.findAllByPlaylist(id)) {
+        for (int i : iPlaylistSongRepository.findAllByPlaylist(id)) {
             Song song = iSongRepository.findById(i).get();
             int isLiked = 0;
-            if(account!=null) {
+            if (account != null) {
                 isLiked = ilikesRepository.isLiked(song.getId(), account.getId());
             }
-            SongDTO songDTO = new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getAccount().getId(),song.getDescription(),isLiked);
+            SongDTO songDTO = new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(), song.getAccount().getId(), song.getDescription(), isLiked);
             listSong.add(songDTO);
         }
         return listSong;
