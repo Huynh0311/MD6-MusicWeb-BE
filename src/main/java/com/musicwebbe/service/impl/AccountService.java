@@ -91,8 +91,7 @@ public class AccountService implements UserDetailsService, IAccountService {
     @Override
     public List<AccountDTO2> getAllByIsAuth() {
         List<Account> accountList = iAccountRepository.getAllByIsAuthOrderByIdDesc(true);
-        List<AccountDTO2> accountDTO2List = accountList.stream()
-                .map(account -> {
+        List<AccountDTO2> accountDTO2List = accountList.stream().map(account -> {
                     return new AccountDTO2(account.getId(),
                             account.getName(),
                             account.getImg());

@@ -29,4 +29,6 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
 
     List<Song> getAllByAccount_Id(int id);
 
+    List<Song> findAllByOrderByIdDesc();
+
 }

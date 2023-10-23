@@ -71,8 +71,7 @@ public class AccountController {
 
     @GetMapping("/findByAuth")
     public List<AccountDTO2> findAccountByAut() {
-        List<AccountDTO2> accountList = iAccountService.getAllByIsAuth();
-        return accountList;
+        return iAccountService.getAllByIsAuth();
     }
 
     @GetMapping("/favorites")
