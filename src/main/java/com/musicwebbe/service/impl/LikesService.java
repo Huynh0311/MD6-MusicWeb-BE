@@ -1,7 +1,10 @@
 package com.musicwebbe.service.impl;
 
+import com.musicwebbe.model.Account;
 import com.musicwebbe.model.Likes;
+import com.musicwebbe.model.Song;
 import com.musicwebbe.repository.ILikesRepository;
+import com.musicwebbe.repository.ISongRepository;
 import com.musicwebbe.service.ILikesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +19,8 @@ import java.util.List;
 public class LikesService implements ILikesService {
     @Autowired
     ILikesRepository iLikesRepository;
+    @Autowired
+    ISongRepository iSongRepository;
 
     @Override
     public Likes save(Likes likes) {
@@ -67,16 +72,17 @@ public class LikesService implements ILikesService {
     }
 
     @Override
-    public Integer setLiked(int idAccount, int idSong, Likes likes) {
-        int result = iLikesRepository.isLiked(idSong, idAccount);
+    public Integer setLiked(Account account, int idSong) {
+        int result = iLikesRepository.isLiked(idSong, account.getId());
         if (result == 1) {
             result = 0;
-            iLikesRepository.removeLikeBySongIDAndAccountID(idSong, idAccount);
+            iLikesRepository.removeLikeBySongIDAndAccountID(idSong, account.getId());
         } else {
             result = 1;
             Likes like = new Likes();
-            like.setAccount(likes.getAccount());
-            like.setSong(likes.getSong());
+            like.setAccount(account);
+            Song song = iSongRepository.findSongByIDHQL(idSong);
+            like.setSong(song);
             iLikesRepository.save(like);
         }
         return result;

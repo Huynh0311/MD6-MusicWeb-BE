@@ -1,9 +1,11 @@
 package com.musicwebbe.controller;
 
+import com.musicwebbe.exeption.EmailExitsException;
 import com.musicwebbe.model.*;
 import com.musicwebbe.model.dto.AccountDTO;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.model.dto.SongDTO2;
+import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.service.ISingerService;
 import com.musicwebbe.service.ISingerSongService;
 import com.musicwebbe.service.ISongService;
@@ -67,26 +69,29 @@ public class SongController {
     public ResponseEntity<SongDTO> findSongByID(@PathVariable int id) {
         SongDTO songDTO = iSongService.findSongById(id);
         if (songDTO == null) {
-            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(songDTO, HttpStatus.OK);
     }
 
     @PostMapping("/play/{id}")
-    public int playSong(@PathVariable int id) {
+    public ResponseEntity<Integer> playSong(@PathVariable int id) {
         Song song = iSongService.findById(id);
+        if(song==null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         int playCount = song.getPlays();
         playCount++;
         song.setPlays(playCount);
         iSongService.edit(song);
-        return playCount;
+        return new ResponseEntity<>(playCount,HttpStatus.OK);
     }
 
     @GetMapping("/getByGenresID/{id}")
     public ResponseEntity<List<SongDTO>> findAllSongByGenresID(@PathVariable int id) {
         Song song = iSongService.findById(id);
         if (song == null) {
-            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         List<SongDTO> listSongDTO = iSongService.getAllSongByGenresID(song);
         return new ResponseEntity<>(listSongDTO, HttpStatus.OK);
@@ -102,8 +107,9 @@ public class SongController {
     }
 
     @GetMapping("/top5ByPlays")
-    public List<Song> getTop5SongsByPlays() {
-        List<Song> top5Songs = iSongService.findTop5ByPlaysDesc();
+    public List<SongDTO> getTop5SongsByPlays() {
+        Account account = getCurrentAccount();
+        List<SongDTO> top5Songs = iSongService.findTop5ByPlaysDesc(account);
         if (top5Songs.size() > 5) {
             top5Songs = top5Songs.subList(0, 5);
         }
@@ -137,24 +143,33 @@ public class SongController {
     }
 
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<List<Song>> findListSongByName(@PathVariable String name) {
-        List<Song> songList = iSongService.findListSongByName(name);
+    public ResponseEntity<List<SongDTO>> findListSongByName(@PathVariable String name) {
+        Account account = getCurrentAccount();
+        List<SongDTO> songList = iSongService.findListSongByName(name,account);
         return ResponseEntity.ok(songList);
     }
 
     @GetMapping("/findBySingerName/{name}")
-    public ResponseEntity<List<Song>> findListSongByNameSinger(@PathVariable String name) {
-        List<Song> songList = iSongService.findListSongByNameSinger(name);
+    public ResponseEntity<List<SongDTO>> findListSongByNameSinger(@PathVariable String name) {
+        Account account = getCurrentAccount();
+        List<SongDTO> songList = iSongService.findListSongByNameSinger(name,account);
         return ResponseEntity.ok(songList);
     }
 
     @GetMapping("/findByPlaylist/{name}")
     public ResponseEntity<List<List<SongDTO>>> findListSongByPlaylist(@PathVariable String name) {
-        List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name);
+        Account account = getCurrentAccount();
+        List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name,account);
         return ResponseEntity.ok(songList);
     }
     @GetMapping("/findAccountBySong/{id}")
     public ResponseEntity<Account> findAccountBySong(@PathVariable int id) {
         return new ResponseEntity<>(accountService.findById(iSongService.getAccountBySong(id)),HttpStatus.ACCEPTED);
+    }
+
+    @GetMapping("/account")
+    public ResponseEntity<List<Song>> getAllSongByAccountId() {
+        List<Song> song = iSongService.getAllSongByAccountId(getCurrentAccount().getId());
+        return ResponseEntity.ok(song);
     }
 }

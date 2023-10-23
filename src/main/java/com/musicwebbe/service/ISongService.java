@@ -4,9 +4,7 @@ import com.musicwebbe.model.Account;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.model.Song;
-import org.springframework.data.repository.query.Param;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.musicwebbe.model.dto.SongFavorite;
 
 import java.util.List;
 
@@ -14,8 +12,11 @@ import java.util.List;
 public interface ISongService extends IService<Song> {
 
     List<Song> getAll();
-    List<Song> findTop5ByPlaysDesc();
+
+    List<SongDTO> findTop5ByPlaysDesc(Account account);
+
     void delete(int id);
+
     List<SongDTO2> getAllSong();
 
     SongDTO2 getaSong(int id);
@@ -23,14 +24,19 @@ public interface ISongService extends IService<Song> {
     SongDTO2 editaSong(SongDTO2 songDTO2);
 
     void deleteaSong(int id);
+
     Song addSong(Account account, Song song);
-    public SongDTO findSongById(int id);
+    SongDTO findSongById(int id);
 
-    public List<SongDTO> getAllSongByGenresID(Song song);
+    List<SongDTO> getAllSongByGenresID(Song song);
 
-    List<Song> findListSongByName(String name);
+    List<SongDTO> findListSongByName(String name,Account account);
 
-    List<Song> findListSongByNameSinger(String name);
-    List<List<SongDTO>> findListSongByPlaylist(String name);
     int getAccountBySong(int id);
+    List<SongDTO> findListSongByNameSinger(String name,Account account);
+    List<List<SongDTO>> findListSongByPlaylist(String name,Account account);
+
+    public List<Song> getAllSongByAccountId(int id);
+    long getTotalSongs();
+    List<SongFavorite> getAllFavoritesByUser(String username);
 }

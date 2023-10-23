@@ -1,16 +1,23 @@
 package com.musicwebbe.controller;
 
+import com.musicwebbe.model.Account;
 import com.musicwebbe.model.Likes;
 import com.musicwebbe.model.Song;
+import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.service.ILikesService;
 import com.musicwebbe.service.ISongService;
+import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @RestController
 @CrossOrigin("*")
@@ -20,6 +27,19 @@ public class LikesController {
     ILikesService iLikesService;
     @Autowired
     ISongService iSongService;
+    @Autowired
+    AccountService accountService;
+
+    public Account getCurrentAccount() {
+        String email = "";
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            email = userDetails.getUsername();
+        }
+        Account account = accountService.findByEmail(email);
+        return account;
+    }
 
     @PostMapping("/check")
     public ResponseEntity<Integer> likeCheck(@RequestBody Likes likes) {
@@ -30,14 +50,14 @@ public class LikesController {
     }
 
     @Transactional
-    @PostMapping("/setlike")
-    public ResponseEntity<Integer> setLike(@RequestBody Likes likes) {
-        int idSong = likes.getSong().getId();
-        int idAccount = likes.getAccount().getId();
-        if (idSong == 0 || idAccount == 0) {
+    @PostMapping("/setlike/{id}")
+    public ResponseEntity<Integer> setLike(@PathVariable int id) {
+        Account account = getCurrentAccount();
+        int idSong = id;
+        if (idSong == 0 || account.getId() == 0) {
             return null;
         }
-        int result = iLikesService.setLiked(idAccount, idSong, likes);
+        int result = iLikesService.setLiked(account, idSong);
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
 
@@ -47,4 +67,5 @@ public class LikesController {
         Integer songLikedQuantity = iLikesService.getLikeQuantity2(id);
         return ResponseEntity.ok(songLikedQuantity != null ? songLikedQuantity : 0);
     }
+
 }

@@ -31,4 +31,6 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
             " WHERE id = :id")
     int getAccountBySong(@Param("id") int id);
 
+    List<Song> getAllByAccount_Id(int id);
+
 }
