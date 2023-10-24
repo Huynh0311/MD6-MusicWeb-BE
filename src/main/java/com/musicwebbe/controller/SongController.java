@@ -201,4 +201,16 @@ public class SongController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @GetMapping("/getLimitSong")
+    public ResponseEntity<List<SongDTO>> getLimitSong() {
+        Account account = getCurrentAccount();
+        return new ResponseEntity<>(iSongService.findAllByOrderByIdDescLimit8(account), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllDesc")
+    public ResponseEntity<List<SongDTO>> getAllSongByIdDesc() {
+        Account account = getCurrentAccount();
+        return new ResponseEntity<>(iSongService.findAllByOrderByIdDesc(account), HttpStatus.OK);
+    }
 }

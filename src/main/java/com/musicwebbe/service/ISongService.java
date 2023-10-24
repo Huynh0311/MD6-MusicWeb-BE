@@ -43,4 +43,8 @@ public interface ISongService extends IService<Song> {
     List<SongFavorite> getAllFavoritesByUser(String username);
 
     boolean isSongOwnedByLoggedInAccount (int id,Account account);
+
+    List<SongDTO> findAllByOrderByIdDescLimit8(Account account);
+
+    List<SongDTO> findAllByOrderByIdDesc(Account account);
 }
