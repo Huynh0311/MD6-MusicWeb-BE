@@ -1,6 +1,7 @@
 package com.musicwebbe.service.impl;
 
 import com.musicwebbe.model.Account;
+import com.musicwebbe.model.PlaylistSong;
 import com.musicwebbe.model.Song;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.repository.ILikesRepository;
@@ -40,5 +41,15 @@ public class PlaylistSongService implements IPlaylistSongService {
             listSong.add(songDTO);
         }
         return listSong;
+    }
+
+    @Override
+    public void save(PlaylistSong playlistSong) {
+        iPlaylistSongRepository.save(playlistSong);
+    }
+
+    @Override
+    public void removeSong(Integer playlistId, Integer songId) {
+        iPlaylistSongRepository.deleteByPlaylistIdAndSongId(playlistId, songId);
     }
 }

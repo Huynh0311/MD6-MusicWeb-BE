@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class PlaylistDTO {
     private int id;
     private String namePlaylist;
-    int idAccount;
+    Integer idAccount;
     private String playlistImg;
     private Integer likesQuantity;
     private Integer isLiked;

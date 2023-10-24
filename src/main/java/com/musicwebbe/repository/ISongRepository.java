@@ -37,4 +37,6 @@ public interface ISongRepository extends JpaRepository<Song, Integer> {
 
     @Query(value = "SELECT CASE WHEN COUNT(s) > 0 THEN true ELSE false END FROM Song s WHERE s.account.id = :accountId and s.id=:songId")
     boolean isSongOwnedByLoggedInAccount(@Param("songId") int songId, @Param("accountId") int accountId);
+    List<Song> findAllByOrderByIdDesc();
+
 }

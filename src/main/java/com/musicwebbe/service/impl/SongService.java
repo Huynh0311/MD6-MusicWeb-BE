@@ -85,7 +85,7 @@ public class SongService implements ISongService {
 
     @Override
     public List<Song> getAll() {
-        return iSongRepository.findAll();
+        return iSongRepository.findAllByOrderByIdDesc();
     }
 
 //    @Override

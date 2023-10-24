@@ -165,9 +165,10 @@ public class SongController {
         List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name, account);
         return ResponseEntity.ok(songList);
     }
+
     @GetMapping("/findAccountBySong/{id}")
     public ResponseEntity<Account> findAccountBySong(@PathVariable int id) {
-        return new ResponseEntity<>(accountService.findById(iSongService.getAccountBySong(id)),HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(accountService.findById(iSongService.getAccountBySong(id)), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/account")
@@ -184,7 +185,7 @@ public class SongController {
     }
 
     @PostMapping("/removeComment/{idSong}/{idComment}")
-    public ResponseEntity<?> removeCommentInASongByCommentID(@PathVariable int idSong,@PathVariable int idComment) {
+    public ResponseEntity<?> removeCommentInASongByCommentID(@PathVariable int idSong, @PathVariable int idComment) {
         Account account = getCurrentAccount();
         boolean result = iSongService.isSongOwnedByLoggedInAccount(idSong, account);
         if (result == true) {
