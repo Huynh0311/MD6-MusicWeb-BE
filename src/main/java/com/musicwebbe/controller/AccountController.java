@@ -10,12 +10,17 @@ import com.musicwebbe.service.impl.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 @RestController
@@ -31,6 +36,8 @@ public class AccountController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ISongService iSongService;
+    @Autowired
+    private JavaMailSender mailSender;
 
     @GetMapping("/all")
     public List<Account> getAll() {
@@ -47,7 +54,7 @@ public class AccountController {
         Account accountSave = accountService.save(accFindId);
         try {
             return new ResponseEntity<>(accountSave, HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -59,7 +66,7 @@ public class AccountController {
         Account accountSave = accountService.save(account);
         try {
             return new ResponseEntity<>(accountSave, HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -80,5 +87,33 @@ public class AccountController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         List<SongFavorite> songs = iSongService.getAllFavoritesByUser(userDetails.getUsername());
         return new ResponseEntity<>(songs, HttpStatus.OK);
+    }
+
+    @PostMapping("/informationEmail/{id}")
+    public ResponseEntity<?> sendInformationEmail(@PathVariable int id) throws MessagingException, UnsupportedEncodingException {
+        try {
+            Account account = accountService.findById(id);
+            if (account == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                String subject = "Cảm ơn bạn đã gửi thông tin xác thực tới chúng tôi";
+                String senderName = "MusicG1 Admin";
+                String mailContent = "<p>Thân gửi " + account.getName() + ",</p>";
+                mailContent += "<p>Cảm ơn bạn đã gửi thông tin xác thực với <strong>tên đăng ký:</strong> " + account.getName() + " và <strong>số Điện thoại:</strong> " + account.getPhone();
+                mailContent += "<p>Chúng tôi sẽ tiến hành kiểm tra và thực hiện xác thực trong thời gian sớm nhất";
+                mailContent += "<p>Thân,</p>";
+                mailContent += "<p>Admin Đạt</p>";
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message);
+                helper.setFrom("musicwebc04@gmail.com", senderName);
+                helper.setTo(account.getEmail());
+                helper.setSubject(subject);
+                helper.setText(mailContent, true);
+                mailSender.send(message);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

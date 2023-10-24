@@ -95,16 +95,16 @@ public class SongService implements ISongService {
 
     @Override
     public List<SongDTO> findTop5ByPlaysDesc(Account account) {
-        List<Song>songList = iSongRepository.findTop5ByPlaysDesc();
+        List<Song> songList = iSongRepository.findTop5ByPlaysDesc();
         List<SongDTO> songDTOList = songList.stream()
                 .map(song -> {
                     Integer isLiked;
-                    if(account==null) {
+                    if (account == null) {
                         isLiked = 0;
-                        return new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getDescription(),isLiked);
-                    }else {
+                        return new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(), song.getDescription(), isLiked);
+                    } else {
                         isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
-                        return new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getDescription(),isLiked);
+                        return new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(), song.getDescription(), isLiked);
                     }
                 }).collect(Collectors.toList());
         return songDTOList;
@@ -281,6 +281,12 @@ public class SongService implements ISongService {
         }
         return parentList;
     }
+
+
+    @Override
+    public int getAccountBySong(int id) {
+        return iSongRepository.getAccountBySong(id);
+    }
     public List<Song> getAllSongByAccountId(int id) {
         return iSongRepository.getAllByAccount_Id(id);
     }
@@ -295,7 +301,7 @@ public class SongService implements ISongService {
     public List<SongFavorite> getAllFavoritesByUser(String username) {
         List<SongFavorite> listSongFavorite = new ArrayList<>();
         List<Likes> likesList = iLikesRepository.findAllByAccountEmail(username);
-        for (Likes likes : likesList){
+        for (Likes likes : likesList) {
             SongFavorite songFavorite = new SongFavorite();
             BeanUtils.copyProperties(likes.getSong(), songFavorite);
             listSongFavorite.add(songFavorite);
@@ -303,4 +309,15 @@ public class SongService implements ISongService {
         return listSongFavorite;
     }
 
+    @Override
+    public boolean isSongOwnedByLoggedInAccount(int songId, Account account) {
+
+        if (account == null) return false;
+        try {
+            return iSongRepository.isSongOwnedByLoggedInAccount(songId, account.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
