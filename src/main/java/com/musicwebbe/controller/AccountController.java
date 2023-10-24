@@ -92,25 +92,29 @@ public class AccountController {
 
     @PostMapping("/informationEmail/{id}")
     public ResponseEntity<?> sendInformationEmail(@PathVariable int id) throws MessagingException, UnsupportedEncodingException {
-        Account account = accountService.findById(id);
-        if (account == null) {
+        try {
+            Account account = accountService.findById(id);
+            if (account == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                String subject = "Cảm ơn bạn đã gửi thông tin xác thực tới chúng tôi";
+                String senderName = "MusicG1 Admin";
+                String mailContent = "<p>Thân gửi " + account.getName() + ",</p>";
+                mailContent += "<p>Cảm ơn bạn đã gửi thông tin xác thực với <strong>tên đăng ký:</strong> " + account.getName() + " và <strong>số Điện thoại:</strong> " + account.getPhone();
+                mailContent += "<p>Chúng tôi sẽ tiến hành kiểm tra và thực hiện xác thực trong thời gian sớm nhất";
+                mailContent += "<p>Thân,</p>";
+                mailContent += "<p>Admin Đạt</p>";
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message);
+                helper.setFrom("musicwebc04@gmail.com", senderName);
+                helper.setTo(account.getEmail());
+                helper.setSubject(subject);
+                helper.setText(mailContent, true);
+                mailSender.send(message);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            String subject = "Cảm ơn bạn đã gửi thông tin xác thực tới chúng tôi";
-            String senderName = "MusicG1 Admin";
-            String mailContent = "<p>Thân gửi " + account.getName() + ",</p>";
-            mailContent += "<p>Cảm ơn bạn đã gửi thông tin xác thực với <strong>tên đăng ký:</strong> "+ account.getName()+" và <strong>số Điện thoại:</strong> "+ account.getPhone();
-            mailContent += "<p>Chúng tôi sẽ tiến hành kiểm tra và thực hiên xác thực trong thời gian sớm nhất";
-            mailContent += "<p>Thân,</p>";
-            mailContent += "<p>Admin Đạt</p>";
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message);
-            helper.setFrom("musicwebc04@gmail.com", senderName);
-            helper.setTo(account.getEmail());
-            helper.setSubject(subject);
-            helper.setText(mailContent,true);
-            mailSender.send(message);
-            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 }
