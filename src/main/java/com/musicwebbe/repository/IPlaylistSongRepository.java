@@ -30,4 +30,6 @@ public interface IPlaylistSongRepository extends JpaRepository<PlaylistSong,Inte
     @Modifying
     @Query(nativeQuery = true, value = "delete FROM musicweb_md6.playlist_song WHERE song_id LIKE %:idsong%;")
     void deleteBySongId(int idsong);
+
+    void deleteByPlaylistIdAndSongId(Integer playlistId, Integer songId);
 }
