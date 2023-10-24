@@ -29,4 +29,6 @@ public interface ISongRepository extends JpaRepository<Song,Integer> {
 
     List<Song> getAllByAccount_Id(int id);
 
+    @Query(nativeQuery = true,value="SELECT name_singer FROM musicweb_md6.song WHERE plays = (select max(plays) from musicweb_md6.song);")
+    String getSingerTop();
 }

@@ -303,4 +303,6 @@ public class SongService implements ISongService {
         return listSongFavorite;
     }
 
+    @Override
+    public String getSingerTop() { return iSongRepository.getSingerTop(); }
 }
