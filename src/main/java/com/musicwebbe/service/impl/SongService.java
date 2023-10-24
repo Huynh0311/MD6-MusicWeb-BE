@@ -230,7 +230,10 @@ public class SongService implements ISongService {
         List<Song> songList = iSongRepository.findListSongByName(name);
         return songList.stream()
                 .map(song -> {
-                    int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    int isLiked =0;
+                    if(account!=null){
+                        isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    }
                     return new SongDTO(
                             song.getId(),
                             song.getNameSong(),
@@ -246,7 +249,10 @@ public class SongService implements ISongService {
     public List<SongDTO> findListSongByNameSinger(String name, Account account) {
         List<Song> songList = iSongRepository.findListSongByNameSinger(name);
         return songList.stream().map(song -> {
-            int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+            int isLiked = 0;
+            if(account!=null) {
+                isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+            }
             return new SongDTO(
                     song.getId(),
                     song.getNameSong(),
@@ -267,7 +273,10 @@ public class SongService implements ISongService {
             List<SongDTO> songDTOList;
             songDTOList = songList.stream()
                     .map(song -> {
-                        int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                        int isLiked = 0;
+                        if(account!=null) {
+                            isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                        }
                         return new SongDTO(
                                 song.getId(),
                                 song.getNameSong(),
@@ -287,6 +296,7 @@ public class SongService implements ISongService {
     public int getAccountBySong(int id) {
         return iSongRepository.getAccountBySong(id);
     }
+
     public List<Song> getAllSongByAccountId(int id) {
         return iSongRepository.getAllByAccount_Id(id);
     }
@@ -320,4 +330,38 @@ public class SongService implements ISongService {
             return false;
         }
     }
+
+    @Override
+    public List<SongDTO> findAllByOrderByIdDescLimit8(Account account) {
+        List<Song> songList = iSongRepository.findAllByOrderByIdDescLimit8();
+        List<SongDTO> songDTOList = songList.stream()
+                .map((song -> {
+                    int isLiked = 0;
+                    if (account != null) {
+                        isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    }
+                    return new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(),
+                            song.getPlays(), song.getGenres(), song.getNameSinger(), song.getDescription(),
+                            song.getAccount().getId(), song.getAccount().getName(), isLiked);
+                })).collect(Collectors.toList());
+        return songDTOList;
+    }
+
+    @Override
+    public List<SongDTO> findAllByOrderByIdDesc(Account account) {
+        List<Song> songList = iSongRepository.findAllByOrderByIdDesc();
+        List<SongDTO> songDTOList = songList.stream()
+                .map((song -> {
+                    int isLiked = 0;
+                    if (account != null) {
+                        isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    }
+                    return new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(),
+                            song.getPlays(), song.getGenres(), song.getNameSinger(), song.getDescription(),
+                            song.getAccount().getId(), song.getAccount().getName(), isLiked);
+                })).collect(Collectors.toList());
+        return songDTOList;
+    }
+
+
 }
