@@ -28,6 +28,10 @@ public interface ISongRepository extends JpaRepository<Song, Integer> {
     List<Song> findListSongByPlaylistName(@Param("name") String name, @Param("id") int id);
 
     void deleteById(int id);
+    @Query(nativeQuery = true,value ="SELECT account_id" +
+            " FROM song" +
+            " WHERE id = :id")
+    int getAccountBySong(@Param("id") int id);
 
     List<Song> getAllByAccount_Id(int id);
 

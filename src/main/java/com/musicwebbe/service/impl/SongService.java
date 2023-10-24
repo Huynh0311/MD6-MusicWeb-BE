@@ -13,8 +13,6 @@ import com.musicwebbe.service.ISingerSongService;
 import com.musicwebbe.service.ISongService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -284,6 +282,11 @@ public class SongService implements ISongService {
         return parentList;
     }
 
+
+    @Override
+    public int getAccountBySong(int id) {
+        return iSongRepository.getAccountBySong(id);
+    }
     public List<Song> getAllSongByAccountId(int id) {
         return iSongRepository.getAllByAccount_Id(id);
     }
