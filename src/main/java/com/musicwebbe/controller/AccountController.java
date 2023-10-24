@@ -3,6 +3,7 @@ package com.musicwebbe.controller;
 import com.musicwebbe.model.Account;
 import com.musicwebbe.model.dto.AccountDTO;
 import com.musicwebbe.model.dto.AccountDTO2;
+import com.musicwebbe.model.dto.ChangePasswordDTO;
 import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.service.IAccountService;
 import com.musicwebbe.service.ISongService;
@@ -60,14 +61,19 @@ public class AccountController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Account> savePassword(@RequestBody Account account) {
-        String password = passwordEncoder.encode(account.getPassword());
-        account.setPassword(password);
-        Account accountSave = accountService.save(account);
-        try {
-            return new ResponseEntity<>(accountSave, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Account> savePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        Account accountLogin = iAccountService.findById(changePasswordDTO.getId());
+        if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), accountLogin.getPassword())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }else {
+            try {
+                String newPassword = passwordEncoder.encode(changePasswordDTO.getPassword());
+                changePasswordDTO.setPassword(newPassword);
+                Account accountSave = accountService.save(changePasswordDTO);
+                return new ResponseEntity<>(accountSave, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
     }
 
