@@ -85,7 +85,7 @@ public class SongService implements ISongService {
 
     @Override
     public List<Song> getAll() {
-        return iSongRepository.findAll();
+        return iSongRepository.findAllByOrderByIdDesc();
     }
 
 //    @Override
@@ -230,7 +230,10 @@ public class SongService implements ISongService {
         List<Song> songList = iSongRepository.findListSongByName(name);
         return songList.stream()
                 .map(song -> {
-                    int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    int isLiked =0;
+                    if(account!=null){
+                        isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    }
                     return new SongDTO(
                             song.getId(),
                             song.getNameSong(),
@@ -246,7 +249,10 @@ public class SongService implements ISongService {
     public List<SongDTO> findListSongByNameSinger(String name, Account account) {
         List<Song> songList = iSongRepository.findListSongByNameSinger(name);
         return songList.stream().map(song -> {
-            int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+            int isLiked = 0;
+            if(account!=null) {
+                isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+            }
             return new SongDTO(
                     song.getId(),
                     song.getNameSong(),
@@ -267,7 +273,10 @@ public class SongService implements ISongService {
             List<SongDTO> songDTOList;
             songDTOList = songList.stream()
                     .map(song -> {
-                        int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                        int isLiked = 0;
+                        if(account!=null) {
+                            isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                        }
                         return new SongDTO(
                                 song.getId(),
                                 song.getNameSong(),
