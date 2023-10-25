@@ -20,7 +20,7 @@ public class NotificationController {
     private SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/notification")
-    public void sendMessage(@RequestBody Notification notification){
+    public void sendMessage(@RequestBody Notification notification) {
         simpMessagingTemplate.convertAndSend("/notification/" + notification.getReceiver().getId(), notification);
     }
 
