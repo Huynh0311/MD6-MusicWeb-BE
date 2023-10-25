@@ -12,4 +12,5 @@ public interface IService<E> {
     E findById(int id);
 
     List<E> getAll();
+
 }
