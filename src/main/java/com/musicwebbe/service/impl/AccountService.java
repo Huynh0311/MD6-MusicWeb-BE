@@ -7,11 +7,13 @@ import com.musicwebbe.model.AccountPrinciple;
 import com.musicwebbe.model.Role;
 import com.musicwebbe.model.dto.AccountDTO;
 import com.musicwebbe.model.dto.AccountDTO2;
+import com.musicwebbe.model.dto.ChangePasswordDTO;
 import com.musicwebbe.repository.IAccountRepository;
 import com.musicwebbe.repository.IRoleRepository;
 import com.musicwebbe.request.RegisterRequest;
 import com.musicwebbe.service.IAccountService;
 import com.musicwebbe.service.IRoleService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -65,6 +67,13 @@ public class AccountService implements UserDetailsService, IAccountService {
     }
 
     public Account save(Account account) {
+        return iAccountRepository.save(account);
+    }
+
+    public Account save(ChangePasswordDTO changePasswordDTO) {
+        Account account = new Account();
+        BeanUtils.copyProperties(changePasswordDTO, account);
+        account.setPassword(changePasswordDTO.getPassword());
         return iAccountRepository.save(account);
     }
 
