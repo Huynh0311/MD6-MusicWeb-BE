@@ -16,5 +16,5 @@ public interface ILikesService extends IService<Likes> {
 
     Integer likeChecking(int idAccount,int idSong);
 
-    public Integer setLiked(Account account, int idSong);
+    Integer setLiked(Account account, int idSong);
 }
