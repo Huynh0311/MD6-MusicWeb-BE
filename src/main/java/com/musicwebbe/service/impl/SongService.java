@@ -346,6 +346,9 @@ public class SongService implements ISongService {
                 })).collect(Collectors.toList());
         return songDTOList;
     }
+    @Override
+    public String getSingerTop() { return iSongRepository.getSingerTop(); }
+
 
     @Override
     public List<SongDTO> findAllByOrderByIdDesc(Account account) {

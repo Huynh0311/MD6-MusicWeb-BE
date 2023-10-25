@@ -41,4 +41,7 @@ public class AdminController {
         Integer isSetAuth = iAccountService.setAuth(id);
         return ResponseEntity.ok(isSetAuth);
     }
+
+    @GetMapping("/singertop")
+    public String getSingerTop() {return iSongService.getSingerTop(); }
 }
