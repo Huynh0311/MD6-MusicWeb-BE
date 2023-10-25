@@ -6,6 +6,7 @@ import com.musicwebbe.model.dto.AccountDTO;
 import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.model.dto.SongFavorite;
+import com.musicwebbe.service.ICommentService;
 import com.musicwebbe.service.ISingerService;
 import com.musicwebbe.service.ISingerSongService;
 import com.musicwebbe.service.ISongService;
@@ -39,6 +40,8 @@ public class SongController {
     ISingerService iSingerService;
     @Autowired
     ISingerSongService iSingerSongService;
+    @Autowired
+    ICommentService iCommentService;
 
     public Account getCurrentAccount() {
         try {
@@ -77,14 +80,14 @@ public class SongController {
     @PostMapping("/play/{id}")
     public ResponseEntity<Integer> playSong(@PathVariable int id) {
         Song song = iSongService.findById(id);
-        if(song==null) {
+        if (song == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         int playCount = song.getPlays();
         playCount++;
         song.setPlays(playCount);
         iSongService.edit(song);
-        return new ResponseEntity<>(playCount,HttpStatus.OK);
+        return new ResponseEntity<>(playCount, HttpStatus.OK);
     }
 
     @GetMapping("/getByGenresID/{id}")
@@ -145,27 +148,69 @@ public class SongController {
     @GetMapping("/findByName/{name}")
     public ResponseEntity<List<SongDTO>> findListSongByName(@PathVariable String name) {
         Account account = getCurrentAccount();
-        List<SongDTO> songList = iSongService.findListSongByName(name,account);
+        List<SongDTO> songList = iSongService.findListSongByName(name, account);
         return ResponseEntity.ok(songList);
     }
 
     @GetMapping("/findBySingerName/{name}")
     public ResponseEntity<List<SongDTO>> findListSongByNameSinger(@PathVariable String name) {
         Account account = getCurrentAccount();
-        List<SongDTO> songList = iSongService.findListSongByNameSinger(name,account);
+        List<SongDTO> songList = iSongService.findListSongByNameSinger(name, account);
         return ResponseEntity.ok(songList);
     }
 
     @GetMapping("/findByPlaylist/{name}")
     public ResponseEntity<List<List<SongDTO>>> findListSongByPlaylist(@PathVariable String name) {
         Account account = getCurrentAccount();
-        List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name,account);
+        List<List<SongDTO>> songList = iSongService.findListSongByPlaylist(name, account);
         return ResponseEntity.ok(songList);
+    }
+
+    @GetMapping("/findAccountBySong/{id}")
+    public ResponseEntity<Account> findAccountBySong(@PathVariable int id) {
+        return new ResponseEntity<>(accountService.findById(iSongService.getAccountBySong(id)), HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/account")
     public ResponseEntity<List<Song>> getAllSongByAccountId() {
         List<Song> song = iSongService.getAllSongByAccountId(getCurrentAccount().getId());
         return ResponseEntity.ok(song);
+    }
+
+    @GetMapping("/checkOwned/{id}")
+    public ResponseEntity<Boolean> isSongOwnedByLoggedInAccount(@PathVariable int id) {
+        Account account = getCurrentAccount();
+        boolean result = iSongService.isSongOwnedByLoggedInAccount(id, account);
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @PostMapping("/removeComment/{idSong}/{idComment}")
+    public ResponseEntity<?> removeCommentInASongByCommentID(@PathVariable int idSong, @PathVariable int idComment) {
+        Account account = getCurrentAccount();
+        boolean result = iSongService.isSongOwnedByLoggedInAccount(idSong, account);
+        if (result == true) {
+            Comment comment;
+            try {
+                comment = iCommentService.findById(idComment);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            iCommentService.delete(comment.getId());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @GetMapping("/getLimitSong")
+    public ResponseEntity<List<SongDTO>> getLimitSong() {
+        Account account = getCurrentAccount();
+        return new ResponseEntity<>(iSongService.findAllByOrderByIdDescLimit8(account), HttpStatus.OK);
+    }
+
+    @GetMapping("/getAllDesc")
+    public ResponseEntity<List<SongDTO>> getAllSongByIdDesc() {
+        Account account = getCurrentAccount();
+        return new ResponseEntity<>(iSongService.findAllByOrderByIdDesc(account), HttpStatus.OK);
     }
 }

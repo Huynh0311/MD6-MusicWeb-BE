@@ -3,6 +3,7 @@ package com.musicwebbe.controller;
 import com.musicwebbe.model.Account;
 import com.musicwebbe.model.dto.AccountDTO;
 import com.musicwebbe.model.dto.AccountDTO2;
+import com.musicwebbe.model.dto.ChangePasswordDTO;
 import com.musicwebbe.model.dto.SongFavorite;
 import com.musicwebbe.service.IAccountService;
 import com.musicwebbe.service.ISongService;
@@ -60,14 +61,19 @@ public class AccountController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Account> savePassword(@RequestBody Account account) {
-        String password = passwordEncoder.encode(account.getPassword());
-        account.setPassword(password);
-        Account accountSave = accountService.save(account);
-        try {
-            return new ResponseEntity<>(accountSave, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Account> savePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        Account accountLogin = iAccountService.findById(changePasswordDTO.getId());
+        if (!passwordEncoder.matches(changePasswordDTO.getOldPassword(), accountLogin.getPassword())){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }else {
+            try {
+                String newPassword = passwordEncoder.encode(changePasswordDTO.getPassword());
+                changePasswordDTO.setPassword(newPassword);
+                Account accountSave = accountService.save(changePasswordDTO);
+                return new ResponseEntity<>(accountSave, HttpStatus.OK);
+            } catch (Exception e) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
         }
     }
 
@@ -78,8 +84,7 @@ public class AccountController {
 
     @GetMapping("/findByAuth")
     public List<AccountDTO2> findAccountByAut() {
-        List<AccountDTO2> accountList = iAccountService.getAllByIsAuth();
-        return accountList;
+        return iAccountService.getAllByIsAuth();
     }
 
     @GetMapping("/favorites")
@@ -92,25 +97,29 @@ public class AccountController {
 
     @PostMapping("/informationEmail/{id}")
     public ResponseEntity<?> sendInformationEmail(@PathVariable int id) throws MessagingException, UnsupportedEncodingException {
-        Account account = accountService.findById(id);
-        if (account == null) {
+        try {
+            Account account = accountService.findById(id);
+            if (account == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            } else {
+                String subject = "Cảm ơn bạn đã gửi thông tin xác thực tới chúng tôi";
+                String senderName = "MusicG1 Admin";
+                String mailContent = "<p>Thân gửi " + account.getName() + ",</p>";
+                mailContent += "<p>Cảm ơn bạn đã gửi thông tin xác thực với <strong>tên đăng ký:</strong> " + account.getName() + " và <strong>số Điện thoại:</strong> " + account.getPhone();
+                mailContent += "<p>Chúng tôi sẽ tiến hành kiểm tra và thực hiện xác thực trong thời gian sớm nhất";
+                mailContent += "<p>Thân,</p>";
+                mailContent += "<p>Admin Đạt</p>";
+                MimeMessage message = mailSender.createMimeMessage();
+                MimeMessageHelper helper = new MimeMessageHelper(message);
+                helper.setFrom("musicwebc04@gmail.com", senderName);
+                helper.setTo(account.getEmail());
+                helper.setSubject(subject);
+                helper.setText(mailContent, true);
+                mailSender.send(message);
+                return new ResponseEntity<>(HttpStatus.OK);
+            }
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            String subject = "Cảm ơn bạn đã gửi thông tin xác thực tới chúng tôi";
-            String senderName = "MusicG1 Admin";
-            String mailContent = "<p>Thân gửi " + account.getName() + ",</p>";
-            mailContent += "<p>Cảm ơn bạn đã gửi thông tin xác thực với <strong>tên đăng ký:</strong> "+ account.getName()+" và <strong>số Điện thoại:</strong> "+ account.getPhone();
-            mailContent += "<p>Chúng tôi sẽ tiến hành kiểm tra và thực hiên xác thực trong thời gian sớm nhất";
-            mailContent += "<p>Thân,</p>";
-            mailContent += "<p>Admin Đạt</p>";
-            MimeMessage message = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(message);
-            helper.setFrom("musicwebc04@gmail.com", senderName);
-            helper.setTo(account.getEmail());
-            helper.setSubject(subject);
-            helper.setText(mailContent,true);
-            mailSender.send(message);
-            return new ResponseEntity<>(HttpStatus.OK);
         }
     }
 }

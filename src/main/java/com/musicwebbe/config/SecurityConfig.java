@@ -84,6 +84,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/playlistLikes/**").permitAll()
                 .antMatchers("/songs/getByGenresID/**").permitAll()
                 .antMatchers("/playlist/**").permitAll()
+                .antMatchers("/ws/**").permitAll()
+                .antMatchers("/notification/**").permitAll()
                 .antMatchers("/apiAccount/auth/**").permitAll()
                 .antMatchers("/apiAccount/informationEmail/**").permitAll()
                 // add test -----------

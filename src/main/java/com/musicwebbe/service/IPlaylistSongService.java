@@ -10,4 +10,8 @@ import java.util.List;
 public interface IPlaylistSongService {
     int countSong(int id);
     List<SongDTO> findAllByPlaylist(int id, Account account);
+
+    void save(PlaylistSong playlistSong);
+
+    void removeSong(Integer playlistId, Integer songId);
 }

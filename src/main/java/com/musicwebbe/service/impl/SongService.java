@@ -85,7 +85,7 @@ public class SongService implements ISongService {
 
     @Override
     public List<Song> getAll() {
-        return iSongRepository.findAll();
+        return iSongRepository.findAllByOrderByIdDesc();
     }
 
 //    @Override
@@ -95,16 +95,16 @@ public class SongService implements ISongService {
 
     @Override
     public List<SongDTO> findTop5ByPlaysDesc(Account account) {
-        List<Song>songList = iSongRepository.findTop5ByPlaysDesc();
+        List<Song> songList = iSongRepository.findTop5ByPlaysDesc();
         List<SongDTO> songDTOList = songList.stream()
                 .map(song -> {
                     Integer isLiked;
-                    if(account==null) {
+                    if (account == null) {
                         isLiked = 0;
-                        return new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getDescription(),isLiked);
-                    }else {
+                        return new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(), song.getDescription(), isLiked);
+                    } else {
                         isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
-                        return new SongDTO(song.getId(),song.getNameSong(),song.getImgSong(),song.getPathSong(),song.getDescription(),isLiked);
+                        return new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(), song.getDescription(), isLiked);
                     }
                 }).collect(Collectors.toList());
         return songDTOList;
@@ -230,7 +230,10 @@ public class SongService implements ISongService {
         List<Song> songList = iSongRepository.findListSongByName(name);
         return songList.stream()
                 .map(song -> {
-                    int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    int isLiked =0;
+                    if(account!=null){
+                        isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    }
                     return new SongDTO(
                             song.getId(),
                             song.getNameSong(),
@@ -246,7 +249,10 @@ public class SongService implements ISongService {
     public List<SongDTO> findListSongByNameSinger(String name, Account account) {
         List<Song> songList = iSongRepository.findListSongByNameSinger(name);
         return songList.stream().map(song -> {
-            int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+            int isLiked = 0;
+            if(account!=null) {
+                isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+            }
             return new SongDTO(
                     song.getId(),
                     song.getNameSong(),
@@ -267,7 +273,10 @@ public class SongService implements ISongService {
             List<SongDTO> songDTOList;
             songDTOList = songList.stream()
                     .map(song -> {
-                        int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                        int isLiked = 0;
+                        if(account!=null) {
+                            isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                        }
                         return new SongDTO(
                                 song.getId(),
                                 song.getNameSong(),
@@ -281,6 +290,13 @@ public class SongService implements ISongService {
         }
         return parentList;
     }
+
+
+    @Override
+    public int getAccountBySong(int id) {
+        return iSongRepository.getAccountBySong(id);
+    }
+
     public List<Song> getAllSongByAccountId(int id) {
         return iSongRepository.getAllByAccount_Id(id);
     }
@@ -295,7 +311,7 @@ public class SongService implements ISongService {
     public List<SongFavorite> getAllFavoritesByUser(String username) {
         List<SongFavorite> listSongFavorite = new ArrayList<>();
         List<Likes> likesList = iLikesRepository.findAllByAccountEmail(username);
-        for (Likes likes : likesList){
+        for (Likes likes : likesList) {
             SongFavorite songFavorite = new SongFavorite();
             BeanUtils.copyProperties(likes.getSong(), songFavorite);
             listSongFavorite.add(songFavorite);
@@ -304,5 +320,51 @@ public class SongService implements ISongService {
     }
 
     @Override
+    public boolean isSongOwnedByLoggedInAccount(int songId, Account account) {
+
+        if (account == null) return false;
+        try {
+            return iSongRepository.isSongOwnedByLoggedInAccount(songId, account.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public List<SongDTO> findAllByOrderByIdDescLimit8(Account account) {
+        List<Song> songList = iSongRepository.findAllByOrderByIdDescLimit8();
+        List<SongDTO> songDTOList = songList.stream()
+                .map((song -> {
+                    int isLiked = 0;
+                    if (account != null) {
+                        isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    }
+                    return new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(),
+                            song.getPlays(), song.getGenres(), song.getNameSinger(), song.getDescription(),
+                            song.getAccount().getId(), song.getAccount().getName(), isLiked);
+                })).collect(Collectors.toList());
+        return songDTOList;
+    }
+    @Override
     public String getSingerTop() { return iSongRepository.getSingerTop(); }
+
+
+    @Override
+    public List<SongDTO> findAllByOrderByIdDesc(Account account) {
+        List<Song> songList = iSongRepository.findAllByOrderByIdDesc();
+        List<SongDTO> songDTOList = songList.stream()
+                .map((song -> {
+                    int isLiked = 0;
+                    if (account != null) {
+                        isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
+                    }
+                    return new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(),
+                            song.getPlays(), song.getGenres(), song.getNameSinger(), song.getDescription(),
+                            song.getAccount().getId(), song.getAccount().getName(), isLiked);
+                })).collect(Collectors.toList());
+        return songDTOList;
+    }
+
+
 }

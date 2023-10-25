@@ -18,4 +18,6 @@ public interface IPlaylistRepository extends JpaRepository<Playlist,Integer> {
     @Query(nativeQuery = true,value = "select pl.* from playlist pl where pl.name_playlist like %:name%")
     List<Playlist> findAllPlaylistByNamePlaylist(@Param("name") String name);
 
+    List<Playlist> findAllByAccount_Id(int accountId);
+
 }

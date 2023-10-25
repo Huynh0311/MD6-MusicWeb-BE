@@ -5,6 +5,8 @@ import com.musicwebbe.model.dto.SongDTO;
 import com.musicwebbe.model.dto.SongDTO2;
 import com.musicwebbe.model.Song;
 import com.musicwebbe.model.dto.SongFavorite;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -32,12 +34,19 @@ public interface ISongService extends IService<Song> {
 
     List<SongDTO> findListSongByName(String name,Account account);
 
+    int getAccountBySong(int id);
     List<SongDTO> findListSongByNameSinger(String name,Account account);
     List<List<SongDTO>> findListSongByPlaylist(String name,Account account);
 
     List<Song> getAllSongByAccountId(int id);
     long getTotalSongs();
     List<SongFavorite> getAllFavoritesByUser(String username);
+
+    boolean isSongOwnedByLoggedInAccount (int id,Account account);
+
+    List<SongDTO> findAllByOrderByIdDescLimit8(Account account);
+
+    List<SongDTO> findAllByOrderByIdDesc(Account account);
 
     String getSingerTop();
 }
