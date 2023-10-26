@@ -240,7 +240,8 @@ public class SongService implements ISongService {
                             song.getImgSong(),
                             song.getPathSong(),
                             song.getAccount().getId(),
-                            isLiked
+                            isLiked,
+                            song.getNameSinger()
                     );
                 }).collect(Collectors.toList());
     }
@@ -259,7 +260,8 @@ public class SongService implements ISongService {
                     song.getImgSong(),
                     song.getPathSong(),
                     song.getAccount().getId(),
-                    isLiked
+                    isLiked,
+                    song.getNameSinger()
             );
         }).collect(Collectors.toList());
     }
@@ -280,10 +282,13 @@ public class SongService implements ISongService {
                         return new SongDTO(
                                 song.getId(),
                                 song.getNameSong(),
-                                song.getImgSong(), song.getPathSong(),
+                                song.getImgSong(),
+                                song.getPathSong(),
                                 song.getAccount().getId(),
                                 playlist1.getPlaylistImg(),
-                                playlist1.getNamePlaylist(), isLiked
+                                playlist1.getNamePlaylist(),
+                                isLiked,
+                                song.getNameSinger()
                         );
                     }).collect(Collectors.toList());
             parentList.add(songDTOList);
