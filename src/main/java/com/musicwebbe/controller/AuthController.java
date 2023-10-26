@@ -53,7 +53,7 @@ public class AuthController {
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
         try {
             accountService.add(registerRequest);
-            return new ResponseEntity<>(registerRequest, HttpStatus.OK);
+            return new ResponseEntity<>(accountService.findAccountByEmail(registerRequest.getEmail()), HttpStatus.OK);
         } catch (EmailExitsException emailExitsException) {
             return new ResponseEntity<>(emailExitsException.getMessage(), HttpStatus.CONFLICT);
         } catch (Exception e) {
