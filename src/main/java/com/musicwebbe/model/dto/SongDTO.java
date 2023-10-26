@@ -29,7 +29,7 @@ public class SongDTO {
     private String playlistName;
     private Integer isLiked;
 
-    public SongDTO(int id, String nameSong, String imgSong, String pathSong, int accountID, String playlistImg, String playlistName, int isLiked) {
+    public SongDTO(int id, String nameSong, String imgSong, String pathSong, int accountID, String playlistImg, String playlistName, int isLiked,String nameSinger) {
         this.id = id;
         this.nameSong = nameSong;
         this.imgSong = imgSong;
@@ -38,15 +38,17 @@ public class SongDTO {
         this.playlistImg = playlistImg;
         this.playlistName = playlistName;
         this.isLiked = isLiked;
+        this.NameSinger = nameSinger;
     }
 
-    public SongDTO(int id, String nameSong, String imgSong, String pathSong, int accountID, int isLiked) {
+    public SongDTO(int id, String nameSong, String imgSong, String pathSong, int accountID, int isLiked,String nameSinger) {
         this.id = id;
         this.nameSong = nameSong;
         this.imgSong = imgSong;
         this.accountID = accountID;
         this.pathSong = pathSong;
         this.isLiked = isLiked;
+        this.NameSinger = nameSinger;
     }
 
     public SongDTO(int id, String nameSong, String imgSong, String pathSong, String description, int isLiked) {
@@ -66,7 +68,7 @@ public class SongDTO {
         this.NameSinger = nameSinger;
     }
 
-    public SongDTO(int id, String nameSong, String imgSong, String pathSong, int accountID, String description, Integer isLiked) {
+    public SongDTO(int id, String nameSong, String imgSong, String pathSong,String nameSinger, int accountID, String description, Integer isLiked) {
         this.id = id;
         this.nameSong = nameSong;
         this.imgSong = imgSong;
@@ -74,6 +76,7 @@ public class SongDTO {
         this.pathSong = pathSong;
         this.description = description;
         this.isLiked = isLiked;
+        this.NameSinger = nameSinger;
     }
 
     public SongDTO(int id, String nameSong, String imgSong, String pathSong, int plays, Genres genres, String nameSinger, String description, int accountID, String accountName,int isLiked) {

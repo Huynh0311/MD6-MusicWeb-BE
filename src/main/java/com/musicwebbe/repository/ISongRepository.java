@@ -42,4 +42,6 @@ public interface ISongRepository extends JpaRepository<Song, Integer> {
     List<Song> findAllByOrderByIdDescLimit8();
 
     List<Song> findAllByOrderByIdDesc();
+    @Query(nativeQuery = true,value="SELECT name_singer FROM musicweb_md6.song WHERE plays = (select max(plays) from musicweb_md6.song);")
+    String getSingerTop();
 }
