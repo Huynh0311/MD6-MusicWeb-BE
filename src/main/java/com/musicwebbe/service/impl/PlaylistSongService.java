@@ -37,7 +37,7 @@ public class PlaylistSongService implements IPlaylistSongService {
             if (account != null) {
                 isLiked = ilikesRepository.isLiked(song.getId(), account.getId());
             }
-            SongDTO songDTO = new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(), song.getAccount().getId(), song.getDescription(), isLiked);
+            SongDTO songDTO = new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(),song.getNameSinger(), song.getAccount().getId(), song.getDescription(), isLiked);
             listSong.add(songDTO);
         }
         return listSong;

@@ -46,32 +46,33 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         Account userInfo = accountService.findByEmail(loginRequest.getEmail());
         return ResponseEntity.ok(new JwtResponse(userInfo.getId(), jwt,
-                userInfo.getEmail(), userInfo.getName(), userInfo.getImg(), userDetails.getAuthorities(),userInfo.isAuth()));
+                userInfo.getEmail(), userInfo.getName(), userInfo.getImg(), userDetails.getAuthorities(), userInfo.isAuth()));
     }
 
     @PostMapping(value = "/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest registerRequest) {
         try {
             accountService.add(registerRequest);
-            return new ResponseEntity<>(registerRequest,HttpStatus.OK);
-        } catch (EmailExitsException emailExitsException){
-            return new ResponseEntity<>(emailExitsException.getMessage(),HttpStatus.CONFLICT);
+            return new ResponseEntity<>(registerRequest, HttpStatus.OK);
+        } catch (EmailExitsException emailExitsException) {
+            return new ResponseEntity<>(emailExitsException.getMessage(), HttpStatus.CONFLICT);
         } catch (Exception e) {
-            return new ResponseEntity<>("Lỗi hệ thống, chi tiết: " + e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Lỗi hệ thống, chi tiết: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public ResponseEntity<?> check(@RequestBody Account account) {
         boolean check = true;
         Account accountCheck = null;
-        if (accountService.findAccountByEmail(account.getEmail()).isPresent()){
+        if (accountService.findAccountByEmail(account.getEmail()).isPresent()) {
             accountCheck = accountService.findAccountByEmail(account.getEmail()).get();
             check = false;
         }
         if (!check) {
-            return new ResponseEntity<>(accountCheck,HttpStatus.OK);
+            return new ResponseEntity<>(accountCheck, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(account,HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(account, HttpStatus.BAD_REQUEST);
         }
     }
 }

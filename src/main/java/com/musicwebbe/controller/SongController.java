@@ -168,7 +168,8 @@ public class SongController {
 
     @GetMapping("/findAccountBySong/{id}")
     public ResponseEntity<Account> findAccountBySong(@PathVariable int id) {
-        return new ResponseEntity<>(accountService.findById(iSongService.getAccountBySong(id)), HttpStatus.ACCEPTED);
+        Account account = accountService.findById(iSongService.getAccountBySong(id));
+        return new ResponseEntity<>(account, HttpStatus.ACCEPTED);
     }
 
     @GetMapping("/account")
