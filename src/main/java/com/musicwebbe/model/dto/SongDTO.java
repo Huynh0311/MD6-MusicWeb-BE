@@ -76,4 +76,18 @@ public class SongDTO {
         this.isLiked = isLiked;
     }
 
+    public SongDTO(int id, String nameSong, String imgSong, String pathSong, int plays, Genres genres, String nameSinger, String description, int accountID, String accountName,int isLiked) {
+        this.id = id;
+        this.nameSong = nameSong;
+        this.imgSong = imgSong;
+        this.pathSong = pathSong;
+        this.plays = plays;
+        this.genres = genres;
+        this.NameSinger = nameSinger;
+        this.description = description;
+        this.accountID = accountID;
+        this.accountName = accountName;
+        this.isLiked = isLiked;
+    }
+
 }

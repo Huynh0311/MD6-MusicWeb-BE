@@ -8,7 +8,6 @@ import com.musicwebbe.repository.IPlaylistLikesRepository;
 import com.musicwebbe.repository.IPlaylistRepository;
 import com.musicwebbe.repository.IPlaylistSongRepository;
 import com.musicwebbe.service.IPlaylistService;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -86,4 +85,24 @@ public class PlaylistService implements IPlaylistService {
                 }).collect(Collectors.toList());
         return playlistDTOList;
     }
+
+    @Override
+    public List<Playlist> findByIdAccount(int idAccount) {
+        return iPlaylistRepository.findAllByAccount_Id(idAccount);
+    }
+
+    @Override
+    public void addPlaylist(PlaylistDTO playlistDTO, Integer idAccount) throws Exception {
+        Playlist playlist = new Playlist();
+        if (playlistDTO.getIdAccount() != idAccount) {
+            throw new Exception();
+        } else {
+            Account account = iAccountRepository.findById(idAccount).get();
+            playlist.setNamePlaylist(playlistDTO.getNamePlaylist());
+            playlist.setAccount(account);
+            playlist.setPlaylistImg(playlistDTO.getPlaylistImg());
+            iPlaylistRepository.save(playlist);
+        }
+    }
+
 }
