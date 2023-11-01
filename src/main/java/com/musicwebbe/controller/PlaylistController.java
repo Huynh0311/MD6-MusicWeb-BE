@@ -82,7 +82,7 @@ public class PlaylistController {
     }
 
     @GetMapping("/getUserByPlaylist/{id}")
-    public ResponseEntity<Account> getAccount(@PathVariable int id) {
+    public ResponseEntity<Account> getAccount(@PathVariable int id){
         return new ResponseEntity<>(playlistService.getAccount(id), HttpStatus.OK);
     }
 

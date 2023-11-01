@@ -107,6 +107,7 @@ public class SongService implements ISongService {
                         return new SongDTO(song.getId(), song.getNameSong(), song.getImgSong(), song.getPathSong(), song.getDescription(), isLiked);
                     }
                 }).collect(Collectors.toList());
+
         return songDTOList;
     }
 
@@ -230,10 +231,7 @@ public class SongService implements ISongService {
         List<Song> songList = iSongRepository.findListSongByName(name);
         return songList.stream()
                 .map(song -> {
-                    int isLiked =0;
-                    if(account!=null){
-                        isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
-                    }
+                    int isLiked = iLikesRepository.isLiked(song.getId(), account.getId());
                     return new SongDTO(
                             song.getId(),
                             song.getNameSong(),
